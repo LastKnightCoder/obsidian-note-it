@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { v4 as uuid } from 'uuid'
-import { Input, Button } from 'antd';
+import { Input, Button, Tabs } from 'antd';
+const { TabPane } = Tabs
 const { TextArea } = Input;
 import styles from './index.module.css';
-import 'antd/dist/antd.css'
+
 import { renderMarkdown } from '../../js/utils';
 
 
@@ -40,12 +41,16 @@ export default function Editor(props) {
 
   return (
     <div className={styles.noteItEditor}>
-      <div className={styles.edit}>
-        <TextArea bordered={false} value={value} showCount autoSize={{ minRows: 6 }} onChange={handleChange} />
-      </div>
-      <div className={styles.preview}>
-        <div dangerouslySetInnerHTML={{ __html: markdownPreview }}></div>
-      </div>
+      <Tabs defaultActiveKey='edit' type='line'>
+        <TabPane key="edit" tab="编辑">
+          <TextArea bordered={false} value={value} showCount autoSize={{ minRows: 6 }} onChange={handleChange} />
+        </TabPane>
+        <TabPane key="preview" tab="预览">
+          <div className={styles.preview}>
+            <div dangerouslySetInnerHTML={{ __html: markdownPreview }}></div>
+          </div>
+        </TabPane>
+      </Tabs>
       <Button style={{ width: 'fit-content' }} onClick={handleSave} type='primary' disabled={!value}>小记一下</Button>
     </div>
   )

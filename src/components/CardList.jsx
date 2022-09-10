@@ -10,7 +10,14 @@ export default function CardList(props) {
   }
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(30em, 1fr))', padding: '2em', gap: '5em', rowGap: '2em' }}>
+    <div style={{ 
+      display: 'flex', 
+      flexDirection: 'column', 
+      padding: '2em', 
+      gap: '2em', 
+      height: '100%', 
+      overflow: 'auto' 
+    }}>
       {notes.map(note => 
         <Card
           key={note.uuid}

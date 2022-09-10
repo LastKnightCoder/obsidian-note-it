@@ -4,6 +4,9 @@ import Editor from './Editor';
 import CardList from './CardList';
 import { Modal } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
+import 'antd/dist/antd.css'
+import 'antd/dist/antd.dark.css'
+// import Test from './Test';
 
 export default function NoteIt(props) {
   const [state, setState] = useState(props.state);
@@ -98,9 +101,13 @@ export default function NoteIt(props) {
   }
 
   return (
-    <div>
-      <Editor editing={state.editing} onChange={handleEditorChange} onSave={handleEditorSave} />
-      <CardList notes={state.notes} editNote={handleEditNote} deleteNote={handleDeleteNote} />
+    <div style={{ display: 'grid', gridTemplateColumns: '1fr 2fr', padding: '2em 5em' }}>
+      <div style={{ height: 'calc(100vh - 300px)', boxShadow: '0 0 10px 0 rgba(0, 0, 0, .3)', marginTop: '2em', overflow: 'auto' }}>
+        <Editor editing={state.editing} onChange={handleEditorChange} onSave={handleEditorSave} />
+      </div>
+      <div style={{ height: 'calc(100vh - 170px)', boxSizing: 'border-box', overflow: 'auto' }}>
+        <CardList notes={state.notes} editNote={handleEditNote} deleteNote={handleDeleteNote} />
+      </div>
     </div>
   )
 }
