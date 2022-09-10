@@ -1,0 +1,36 @@
+.noteItEditor {
+  width: 100%;
+  display: grid;
+  padding: 2em 2em;
+  grid-template-columns: 1fr 1fr;
+  row-gap: 2em;
+  column-gap: 5em
+}
+
+.noteItEditor textarea {
+  width: 100%;
+  min-height: 100%;
+  /* padding: 2em; */
+  /* border: 1px solid black; */
+  border: none;
+}
+
+.noteItEditor .ant-input-textarea {
+  min-height: 100%;
+}
+
+.noteItEditor textarea:focus {
+  box-shadow: none !important;
+  border: none !important;
+}
+
+.noteItEditor .edit {
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, .2);
+  padding: 2em;
+}
+
+.noteItEditor .preview {
+  user-select: text;
+  padding: 2em;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, .2);
+}
