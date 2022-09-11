@@ -54,9 +54,8 @@ export default class NoteItView extends TextFileView {
       this.state = JSON.parse(data || '{}');
       this.parseError = false;
     } catch (e) {
-      message.error('解析错误');
+      message.error('数据解析错误');
       this.oldData = data;
-      console.log('oldData', this.oldData);
       this.parseError = true;
       this.state = {
         editing: {
@@ -89,10 +88,6 @@ export default class NoteItView extends TextFileView {
   getDisplayText(): string {
     return this.file?.basename + '.' +  this.file?.extension
   }
-
-  // protected async onOpen(): Promise<void> {
-  //   console.log('Opened');
-  // }
 
   protected async onClose(): Promise<void> {
     this.root.unmount();

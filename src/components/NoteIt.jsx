@@ -74,7 +74,7 @@ export default function NoteIt(props) {
       if (note.uuid === noteWillDelete.uuid) {
         return {
           ...noteWillDelete,
-          isDeleted: 1
+          isDeleted: true
         }
       } else {
         return note;
