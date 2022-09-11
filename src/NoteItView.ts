@@ -95,7 +95,11 @@ export default class NoteItView extends TextFileView {
   // }
 
   protected async onClose(): Promise<void> {
-    this.root.unmount()
+    this.root.unmount();
+    // Obsidian 限流，为保证保存成功，2s后保存
+    setTimeout(() => {
+      this.requestSave();
+    }, 2000);
   }
 }
 

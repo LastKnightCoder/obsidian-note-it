@@ -54,8 +54,8 @@ export default function Editor(props) {
     setMarkdownPreview(await renderMarkdown(content));
     onChange({
       ...noteInfo,
-      content: value,
-      preview: markdownPreview
+      content,
+      preview: await renderMarkdown(content)
     })
   }
 
@@ -82,7 +82,7 @@ export default function Editor(props) {
       <Tabs defaultActiveKey={activeKey} type='line' onChange={handleTabChange}>
         <TabPane key="edit" tab="编辑">
           <div className='editor'>
-            <TextArea bordered={false} value={value} showCount autoSize={{ minRows: 30 }} onChange={handleChange} />
+            <TextArea bordered={false} value={value} autoSize={{ minRows: 20 }} showCount onChange={handleChange} />
           </div>
         </TabPane>
         <TabPane key="preview" tab="预览">

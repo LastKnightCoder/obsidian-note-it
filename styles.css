@@ -1,33 +1,47 @@
 @import url('node_modules/antd/dist/antd.css');
 
+.note-it-container {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  padding: 2em 5em;
+  column-gap: 5em;
+  /* background-color: #f5f6f7; */
+  height: calc(100vh - 111px);
+}
+
+.note-it-preview-container {
+  margin-top: 1em;
+}
+
 /* 列表整体样式 */
 .note-it-classlist {
   display: flex;
   flex-direction: column;
-  padding: 2em;
   gap: 2em;
   overflow: auto;
-  margin-top: 5em;
+  padding: 2em;
+  /* background-color: #EEE; */
 }
 
 /* 卡片区样式 */
 .note-it-card {
-  --shadow-color: rgba(0, 0, 0, .1);
+  --shadow-color1: #aaa;
+  --shadow-color2: #fff;
   --border-color: #e8e8e8;
   --background-color: transparent;
   --svg-fill: #262626;
-  padding: 2em;
-  padding-bottom: 1em;
-  box-shadow: 0 0 10px 0 var(--shadow-color); 
+  padding: 2.5em 2em 1em;
+  box-shadow: 3px 3px 10px var(--shadow-color1), -5px -5px 10px var(--shadow-color2); 
   user-select: text;
   border-radius: 5px;
-  /* border: 1px solid var(--border-color); */
   background-color: var(--background-color);
   position: relative;
+  font-size: 1.2rem;
 }
 
 .theme-dark .note-it-card {
-  --shadow-color: rgba(255, 255, 255, .1);
+  --shadow-color1: #58585b;
+  --shadow-color2: #1c1b1f;
   --border-color: white;
   --background-color: transparent;
   --svg-fill: #d1dade;
@@ -78,10 +92,7 @@
 }
 
 .note-it-card pre[class*="lang"]:hover .copy-code-button {
-  display: none;
-  position: absolute;
-  right: 1em;
-  top: 1em;
+  display: block;
 }
 
 .note-it-card :is(h1, h2, h3, h4, h5, h6) {
@@ -90,17 +101,23 @@
 
 
 /* 编辑区样式 */
+.note-it-editor {
+  max-width: 100%;
+  overflow: hidden;
+}
 
 .note-it-editor .editor textarea {
   --border-color: #e8e8e8;
   width: 100%;
-  font-size: 16px;
+  font-size: 1.2rem;
   color: var(--text-normal) !important;
   border-radius: 4px;
   box-shadow: none !important;
   border: 1px solid var(--border-color) !important;
   padding-top: 1em;
   padding-left: 1em;
+  max-height: calc(100vh - 300px) !important;
+  overflow: auto !important;
 }
 
 .note-it-editor .editor textarea:focus {
@@ -110,6 +127,12 @@
 
 .theme-dark .note-it-editor .editor textarea {
   --border-color: white;
+}
+
+.note-it-editor .preview {
+  max-width: 100%;
+  max-height: calc(100vh - 300px) !important;
+  overflow: auto !important;
 }
 
 .note-it-editor .preview pre[class*="lang"] {
@@ -133,5 +156,27 @@
 
 .note-it-editor .preview :is(h1, h2, h3, h4, h5, h6) {
   color: var(--text-normal);
+}
+
+/* 平板 */
+
+@media screen and (max-width: 900px) {
+  .note-it-container {
+    display: flex;
+    flex-direction: column;
+    padding: 2em 5em;
+    height: auto;
+  }
+
+  .note-it-preview-container {
+    height: auto;
+    overflow: visible;
+    margin-top: 5em;
+  }
+
+  .note-it-editor .editor textarea {
+    max-height: calc(100vh - 200px);
+    overflow: hidden;
+  }
 }
 

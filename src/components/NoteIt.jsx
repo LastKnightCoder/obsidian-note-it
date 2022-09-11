@@ -85,11 +85,11 @@ export default function NoteIt(props) {
   }
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '2fr 3fr', padding: '2em 5em' }}>
-      <div style={{ marginTop: '2em' }}>
+    <div className='note-it-container'>
+      <div className='note-it-editor-container'>
         <Editor editing={state.editing} onChange={handleEditorChange} onSave={handleEditorSave} />
       </div>
-      <div style={{ height: 'calc(100vh - 270px)', boxSizing: 'border-box', overflow: 'auto' }}>
+      <div className='note-it-preview-container'>
         <CardList notes={state.notes} deleteNote={handleDeleteNote} />
       </div>
     </div>
