@@ -35,7 +35,9 @@ export default class NoteItView extends TextFileView {
     this.plugin = plugin;
     this.state = {
       editing: {
-        content: ""
+        content: "",
+        preview: "",
+        tags: []
       },
       notes: []
     };

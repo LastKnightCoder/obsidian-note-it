@@ -7,6 +7,7 @@ export default function NoteIt(props) {
   const [state, setState] = useState(props.state);
 
   useEffect(() => {
+    console.log('state', state);
     props.save(state);
   }, [state]);
 
@@ -29,22 +30,22 @@ export default function NoteIt(props) {
   }
 
   const updateNote = editing => {
-    const notes = state.notes.map(note => {
+    const newNotes = state.notes.map(note => {
       if (note.uuid === editing.uuid) {
+        console.log('editing', editing);
         return editing;
       } else {
         return note;
       }
     });
+    console.log('newNotes', newNotes);
     setState({
       editing: {
         content: "",
         preview: "",
-        tags: [],
-        isDeleted: false,
-        isCreated: false
+        tags: []
       },
-      notes
+      notes: [...newNotes]
     });
   }
 
@@ -58,9 +59,7 @@ export default function NoteIt(props) {
       editing: {
         content: "",
         preview: "",
-        tags: [],
-        isDeleted: false,
-        isCreated: false
+        tags: []
       },
       notes: Array.isArray(state.notes) ? [createdEditing, ...state.notes] : [createdEditing]
     })

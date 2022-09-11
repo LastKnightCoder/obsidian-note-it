@@ -9,3 +9,11 @@ export const renderMarkdown = async (source) => {
 export const getRandom = n => {
   return Math.floor(Math.random() * n);
 }
+
+export const sleep = async time => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve()
+    }, time);
+  });
+}

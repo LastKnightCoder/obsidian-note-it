@@ -15,17 +15,16 @@ export default function Editor(props) {
 
   const [value, setValue] = useState(content);
   const [markdownPreview, setMarkdownPreview] = useState(preview);
+
   const [noteTags, setNoteTags] = useState(tags);
+  const [inputTagVisible, setInputTagVisible] = useState(false);
+  const [inputTag, setInputTag] = useState('');
 
   const [activeKey, setActiveKey] = useState('edit');
   const [noteInfo, setNoteInfo] = useState(editing || {});
 
-  const [inputTagVisible, setInputTagVisible] = useState(false);
-  const [inputTag, setInputTag] = useState('');
 
-  // const [textareaPosition, setPosition] = useState(0);
-
-  const handleEditNote = useCallback(e => {
+  const handleEditNote = e => {
     if (value) {
       // 先保存
       onSave({
@@ -33,21 +32,17 @@ export default function Editor(props) {
         content: value,
         preview: markdownPreview,
         tags: noteTags,
-        createTime: editing.createTime || Date.now(),
+        createTime: noteInfo.createTime || Date.now(),
         updateTime: Date.now(),
-        uuid: editing.uuid || uuid()
+        uuid: noteInfo.uuid || uuid()
       })
     }
-
     const editNote = e.detail;
     setValue(editNote.content || '');
     setMarkdownPreview(editNote.preview || '');
-    setNoteInfo({...editNote})
+    setNoteInfo({...editNote});
     setNoteTags(editNote.tags || []);
-    onChange({
-      ...editNote
-    });
-  }, [value]);
+  }
 
   useEffect(() => {
     window.addEventListener('note-it-edit-note', handleEditNote);
@@ -55,21 +50,26 @@ export default function Editor(props) {
     return () => {
       window.removeEventListener('note-it-edit-note', handleEditNote);
     }
-  }, [handleEditNote])
+  }, [handleEditNote]);
+
+  useEffect(() => {
+    onChange({
+      ...noteInfo
+    });
+  }, [noteInfo]);
 
   const handleChange = async e => {
-    // console.log('e', e.target.selectionEnd);
-    // setPosition(e.target.selectionEnd);
-    // e.target.selectionEnd = position;
     const content = e.target.value;
-    const preview = await renderMarkdown(content);
     setValue(content);
+    // 下面这行语句放在 setValue 的下面和上面效果完全不一样
+    // 放在上面会导致每次编辑时，文字跑到最后面
+    // 并且输入中文字符会被输入两次，而放在下面则没事
+    const preview = await renderMarkdown(content);
     setMarkdownPreview(preview);
     onChange({
       ...noteInfo,
       content,
-      preview,
-      tags: noteTags
+      preview
     })
   }
 
@@ -85,8 +85,12 @@ export default function Editor(props) {
     })
     setValue('');
     setMarkdownPreview('');
-    setNoteInfo({})
-    setNoteTags([])
+    setNoteTags([]);
+    setNoteInfo({
+      content: "",
+      preview: "",
+      tags: []
+    });
   }
 
   const handleTabChange = (key) => {
@@ -99,8 +103,6 @@ export default function Editor(props) {
     setNoteTags(tags);
     onChange({
       ...noteInfo,
-      content: value,
-      preview: markdownPreview,
       tags
     })
   }
@@ -110,8 +112,6 @@ export default function Editor(props) {
     setNoteTags(tags);
     onChange({
       ...noteInfo,
-      content: value,
-      preview: markdownPreview,
       tags
     });
     setInputTagVisible(false);
@@ -153,7 +153,7 @@ export default function Editor(props) {
               bordered
               type="text"
               size="small"
-              style={{ width: 128 }}
+              style={{ width: '100%' }}
               value={inputTag}
               onChange={handleInputChange}
               onBlur={handleInputConfirm}
@@ -162,7 +162,7 @@ export default function Editor(props) {
           )}
           {!inputTagVisible && (
             <Tag onClick={showInput} style={{ borderStyle: 'dashed' }}>
-              <PlusOutlined /> New Tag
+              <PlusOutlined /> 新建标签
             </Tag>
           )}
         </div>
@@ -175,7 +175,7 @@ export default function Editor(props) {
       <Tabs defaultActiveKey={activeKey} type='line' onChange={handleTabChange}>
         <TabPane key="edit" tab="编辑">
           <div className='editor'>
-            <TextArea bordered={false} value={value} autoSize={{ minRows: 10 }} showCount onChange={handleChange} />
+            <TextArea bordered={false} value={value} autoSize={{ minRows: 15 }} showCount onChange={handleChange} />
           </div>
         </TabPane>
         <TabPane key="preview" tab="预览">
