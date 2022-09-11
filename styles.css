@@ -5,7 +5,6 @@
   grid-template-columns: 2fr 3fr;
   padding: 2em 5em;
   column-gap: 5em;
-  /* background-color: #f5f6f7; */
   height: calc(100vh - 131px);
   overflow: hidden;
 }
@@ -22,8 +21,7 @@
   flex-direction: column;
   gap: 2em;
   overflow: auto;
-  padding: 2em;
-  /* background-color: #EEE; */
+  padding: 1em;
 }
 
 /* 卡片区样式 */
@@ -33,7 +31,7 @@
   --border-color: #e8e8e8;
   --background-color: transparent;
   --svg-fill: #262626;
-  padding: 2.5em 2em 1em;
+  padding: 1.5em 2em 1em;
   box-shadow: 3px 3px 10px var(--shadow-color1), -5px -5px 10px var(--shadow-color2); 
   user-select: text;
   border-radius: 5px;
@@ -48,6 +46,14 @@
   --border-color: white;
   --background-color: transparent;
   --svg-fill: #d1dade;
+}
+
+.note-it-card .note-it-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding-right: 2em;
+  margin-bottom: 1em;
 }
 
 .note-it-card .icons-wrapper {
@@ -121,6 +127,7 @@
   padding-left: 1em;
   max-height: calc(100vh - 300px) !important;
   overflow: auto !important;
+  font-family: 'Fira Code', Consolas, Lora, '华文新魏', '魏碑-简', monospace;
 }
 
 .note-it-editor .editor textarea:focus {
@@ -159,6 +166,18 @@
 
 .note-it-editor .preview :is(h1, h2, h3, h4, h5, h6) {
   color: var(--text-normal);
+}
+
+/* 标签 */
+.note-it-editor .note-it-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 1em;
+}
+
+.note-it-editor .note-it-tags-container {
+  margin: 1em 0;
 }
 
 /* 平板 */

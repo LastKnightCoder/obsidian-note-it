@@ -29,7 +29,7 @@ export default function NoteIt(props) {
   }
 
   const updateNote = editing => {
-    const newNotes = state.notes.map(note => {
+    const notes = state.notes.map(note => {
       if (note.uuid === editing.uuid) {
         return editing;
       } else {
@@ -39,9 +39,12 @@ export default function NoteIt(props) {
     setState({
       editing: {
         content: "",
-        preview: ""
+        preview: "",
+        tags: [],
+        isDeleted: false,
+        isCreated: false
       },
-      notes: newNotes
+      notes
     });
   }
 
@@ -54,7 +57,10 @@ export default function NoteIt(props) {
     setState({
       editing: {
         content: "",
-        preview: ""
+        preview: "",
+        tags: [],
+        isDeleted: false,
+        isCreated: false
       },
       notes: Array.isArray(state.notes) ? [createdEditing, ...state.notes] : [createdEditing]
     })
@@ -72,7 +78,7 @@ export default function NoteIt(props) {
       if (note.uuid === noteWillDelete.uuid) {
         return {
           ...noteWillDelete,
-          isDeleted: 1
+          isDeleted: true
         }
       } else {
         return note;

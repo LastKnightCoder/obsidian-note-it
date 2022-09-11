@@ -5,3 +5,7 @@ export const renderMarkdown = async (source) => {
   await MarkdownRenderer.renderMarkdown(source, tempEl, '.', null);
   return tempEl.innerHTML;
 };
+
+export const getRandom = n => {
+  return Math.floor(Math.random() * n);
+}
