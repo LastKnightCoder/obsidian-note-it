@@ -1,8 +1,10 @@
 import * as React from 'react';
+import { Tag } from 'antd';
+import { tagColors } from '../js/constants';
 
 export default function Card(props) {
   const { deleteNote, note } = props;
-  const { isDeleted = false, preview = '' } = note;
+  const { isDeleted = false, preview = '', tags = [] } = note;
 
   const handleEditNote = () => {
     const event = new CustomEvent('note-it-edit-note', {
@@ -21,6 +23,11 @@ export default function Card(props) {
 
   return (
     <div className="note-it-card">
+      <div className='note-it-card-tags'>
+        {tags?.map((tag, index) => {
+          return <Tag color={tagColors[index % tagColors.length]}>{tag}</Tag>
+        })}
+      </div>
       <div dangerouslySetInnerHTML={{__html: preview}}></div>
       <div className='icons-wrapper'>
         <div className='icons'>

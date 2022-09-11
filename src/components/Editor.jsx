@@ -151,7 +151,7 @@ export default function Editor(props) {
           )}
           {!inputTagVisible && (
             <Tag onClick={showInput} style={{ borderStyle: 'dashed' }}>
-              <PlusOutlined /> New Tag
+              <PlusOutlined /> 新建标签
             </Tag>
           )}
         </div>

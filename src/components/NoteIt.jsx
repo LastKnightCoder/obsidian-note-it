@@ -39,7 +39,8 @@ export default function NoteIt(props) {
     setState({
       editing: {
         content: "",
-        preview: ""
+        preview: "",
+        tags: []
       },
       notes: newNotes
     });
@@ -54,7 +55,8 @@ export default function NoteIt(props) {
     setState({
       editing: {
         content: "",
-        preview: ""
+        preview: "",
+        tags: []
       },
       notes: Array.isArray(state.notes) ? [createdEditing, ...state.notes] : [createdEditing]
     })
