@@ -1,8 +1,137 @@
-/*
+@import url('node_modules/antd/dist/antd.css');
 
-This CSS file will be included with your plugin, and
-available in the app when your plugin is enabled.
+/* 列表整体样式 */
+.note-it-classlist {
+  display: flex;
+  flex-direction: column;
+  padding: 2em;
+  gap: 2em;
+  overflow: auto;
+  margin-top: 5em;
+}
 
-If your plugin does not need CSS, delete this file.
+/* 卡片区样式 */
+.note-it-card {
+  --shadow-color: rgba(0, 0, 0, .1);
+  --border-color: #e8e8e8;
+  --background-color: transparent;
+  --svg-fill: #262626;
+  padding: 2em;
+  padding-bottom: 1em;
+  box-shadow: 0 0 10px 0 var(--shadow-color); 
+  user-select: text;
+  border-radius: 5px;
+  /* border: 1px solid var(--border-color); */
+  background-color: var(--background-color);
+  position: relative;
+}
 
-*/
+.theme-dark .note-it-card {
+  --shadow-color: rgba(255, 255, 255, .1);
+  --border-color: white;
+  --background-color: transparent;
+  --svg-fill: #d1dade;
+}
+
+.note-it-card .icons-wrapper {
+  display: none;
+}
+
+.note-it-card:hover .icons-wrapper {
+  display: block;
+}
+
+.note-it-card .icons {
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  gap: 1em;
+  top: 1em;
+  right: 1em;
+}
+
+.note-it-card .icons .edit {
+  cursor: pointer;
+  width: 1em;
+  height: 1em;
+}
+
+.note-it-card .icons .delete {
+  cursor: pointer;
+  width: 1em;
+  height: 1em;
+}
+
+.note-it-card .icons svg path {
+  fill: var(--svg-fill);
+}
+
+.note-it-card pre[class*="lang"] {
+  position: relative;
+}
+
+.note-it-card pre[class*="lang"] .copy-code-button {
+  display: none;
+  position: absolute;
+  right: 1em;
+  top: 1em;
+}
+
+.note-it-card pre[class*="lang"]:hover .copy-code-button {
+  display: none;
+  position: absolute;
+  right: 1em;
+  top: 1em;
+}
+
+.note-it-card :is(h1, h2, h3, h4, h5, h6) {
+  color: var(--text-normal);
+}
+
+
+/* 编辑区样式 */
+
+.note-it-editor .editor textarea {
+  --border-color: #e8e8e8;
+  width: 100%;
+  font-size: 16px;
+  color: var(--text-normal) !important;
+  border-radius: 4px;
+  box-shadow: none !important;
+  border: 1px solid var(--border-color) !important;
+  padding-top: 1em;
+  padding-left: 1em;
+}
+
+.note-it-editor .editor textarea:focus {
+  box-shadow: none !important;
+  border: 1px solid var(--border-color) !important;
+}
+
+.theme-dark .note-it-editor .editor textarea {
+  --border-color: white;
+}
+
+.note-it-editor .preview pre[class*="lang"] {
+  position: relative;
+}
+
+.note-it-editor .preview pre[class*="lang"] .copy-code-button {
+  display: none;
+  position: absolute;
+  right: 1em;
+  top: 1em;
+}
+
+.note-it-editor .preview pre[class*="lang"]:hover .copy-code-button {
+  display: block;
+}
+
+.theme-dark {
+  --text-normal: #CCCCCC;
+}
+
+.note-it-editor .preview :is(h1, h2, h3, h4, h5, h6) {
+  color: var(--text-normal);
+}
+

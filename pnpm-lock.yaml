@@ -11,6 +11,7 @@ specifiers:
   builtin-modules: 3.3.0
   esbuild: 0.14.47
   esbuild-css-modules-plugin: ^2.5.2
+  lodash: ^4.17.21
   obsidian: latest
   react: ^18.2.0
   react-dom: ^18.2.0
@@ -24,6 +25,7 @@ dependencies:
   '@types/react-dom': 18.0.6
   antd: 4.19.5_biqbaboplfbrettd7655fr4n2y
   esbuild-css-modules-plugin: 2.5.2_esbuild@0.14.47
+  lodash: 4.17.21
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
   uuid: 9.0.0

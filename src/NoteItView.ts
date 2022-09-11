@@ -4,6 +4,7 @@ import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
 // @ts-ignore
 import NoteIt from './components/NoteIt';
+import { message } from 'antd'
 
 interface IData {
   name?: string,
@@ -27,6 +28,8 @@ export default class NoteItView extends TextFileView {
   plugin: NoteItPlugin;
   state: IState;
   root: ReactDOM.Root;
+  parseError: boolean;
+  oldData: string;
   constructor(leaf: WorkspaceLeaf, plugin: NoteItPlugin) {
     super(leaf);
     this.plugin = plugin;
@@ -39,13 +42,30 @@ export default class NoteItView extends TextFileView {
   }
 
   getViewData(): string {
+    if (this.parseError) {
+      return this.oldData;
+    }
     const data = JSON.stringify(this.state, undefined, 2);
     return data;
   }
 
   setViewData(data: string, clear: boolean): void {
-    this.state = JSON.parse(data);
-    
+    try {
+      this.state = JSON.parse(data || '{}');
+      this.parseError = false;
+    } catch (e) {
+      message.error('解析错误');
+      this.oldData = data;
+      console.log('oldData', this.oldData);
+      this.parseError = true;
+      this.state = {
+        editing: {
+          content: ""
+        },
+        notes: []
+      };
+    }
+
     this.root = ReactDOM.createRoot(this.containerEl.lastChild as HTMLDivElement);
     this.root.render(React.createElement(NoteIt, {
       state: this.state,
