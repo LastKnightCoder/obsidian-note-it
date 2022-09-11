@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect, useCallback } from 'react';
 import { v4 as uuid } from 'uuid'
-import { Input, Button, Tabs, Tag } from 'antd';
+import { Input, Button, Tabs, Tag, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 const { TabPane } = Tabs
 const { TextArea } = Input;
@@ -23,7 +23,7 @@ export default function Editor(props) {
   const [activeKey, setActiveKey] = useState('edit');
   const [noteInfo, setNoteInfo] = useState(editing || {});
 
-  const handleEditNote = useCallback(e => {
+  const handleEditNote = e => {
     if (value) {
       // 先保存
       onSave({
@@ -31,21 +31,17 @@ export default function Editor(props) {
         content: value,
         preview: markdownPreview,
         tags: noteTags,
-        createTime: editing.createTime || Date.now(),
+        createTime: noteInfo.createTime || Date.now(),
         updateTime: Date.now(),
-        uuid: editing.uuid || uuid()
+        uuid: noteInfo.uuid || uuid()
       })
     }
-
     const editNote = e.detail;
     setValue(editNote.content || '');
     setMarkdownPreview(editNote.preview || '');
     setNoteInfo({...editNote});
     setNoteTags(editNote.tags || []);
-    onChange({
-      ...editNote
-    });
-  }, [value]);
+  }
 
   useEffect(() => {
     window.addEventListener('note-it-edit-note', handleEditNote);
@@ -53,16 +49,26 @@ export default function Editor(props) {
     return () => {
       window.removeEventListener('note-it-edit-note', handleEditNote);
     }
-  }, [handleEditNote])
+  }, [handleEditNote]);
+
+  useEffect(() => {
+    onChange({
+      ...noteInfo
+    });
+  }, [noteInfo]);
 
   const handleChange = async e => {
     const content = e.target.value;
     setValue(content);
-    setMarkdownPreview(await renderMarkdown(content));
+    // 下面这行语句放在 setValue 的下面和上面效果完全不一样
+    // 放在上面会导致每次编辑时，文字跑到最后面
+    // 并且输入中文字符会被输入两次，而放在下面则没事
+    const preview = await renderMarkdown(content);
+    setMarkdownPreview(preview);
     onChange({
       ...noteInfo,
       content,
-      preview: await renderMarkdown(content)
+      preview
     })
   }
 
@@ -79,7 +85,11 @@ export default function Editor(props) {
     setValue('');
     setMarkdownPreview('');
     setNoteTags([]);
-    setNoteInfo({});
+    setNoteInfo({
+      content: "",
+      preview: "",
+      tags: []
+    });
   }
 
   const handleTabChange = (key) => {
