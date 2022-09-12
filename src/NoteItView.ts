@@ -69,6 +69,9 @@ export default class NoteItView extends TextFileView {
       };
     }
 
+    if (this.root) {
+      this.root.unmount();
+    }
     this.root = ReactDOM.createRoot(this.containerEl.lastChild as HTMLDivElement);
     this.root.render(React.createElement(NoteIt, {
       state: this.state,
@@ -82,7 +85,9 @@ export default class NoteItView extends TextFileView {
   }
 
   clear(): void {
-    this.root.unmount();
+    if (this.root) {
+      this.root.unmount();
+    }
     this.state = {};
   }
 
@@ -95,7 +100,9 @@ export default class NoteItView extends TextFileView {
   }
 
   protected async onClose(): Promise<void> {
-    this.root.unmount();
+    if (this.root) {
+      this.root.unmount();
+    }
     // Obsidian 限流，为保证保存成功，2s后保存
     setTimeout(() => {
       this.requestSave();

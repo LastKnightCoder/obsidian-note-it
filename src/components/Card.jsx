@@ -25,7 +25,7 @@ export default function Card(props) {
     <div className="note-it-card">
       <div className='note-it-card-tags'>
         {tags?.map((tag, index) => {
-          return <Tag color={tagColors[index % tagColors.length]}>{tag}</Tag>
+          return <Tag color={tagColors[index % tagColors.length]} key={tag}>{tag}</Tag>
         })}
       </div>
       <div dangerouslySetInnerHTML={{__html: preview}}></div>

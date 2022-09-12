@@ -4,11 +4,11 @@ import NoteItView, { VIEW_TYPE } from './NoteItView';
 // Remember to rename these classes and interfaces!
 
 interface NoteItSettings {
-  mySetting: string;
+  folder: string;
 }
 
 const DEFAULT_SETTINGS: NoteItSettings = {
-  mySetting: 'default'
+  folder: ''
 }
 
 export default class NoteItPlugin extends Plugin {
@@ -21,7 +21,7 @@ export default class NoteItPlugin extends Plugin {
 
     this.addSettingTab(new NoteItSettingTab(this.app, this));
 
-    this.addRibbonIcon('create-new', '新建小记', () => {
+    this.addRibbonIcon('create-new', '新建小记', async () => {
       const defaultValue = {
         editing: {
           content: "",
@@ -30,7 +30,14 @@ export default class NoteItPlugin extends Plugin {
         },
         notes: []
       }
-      this.app.vault.create(`${Date.now()}.note`, JSON.stringify(defaultValue, undefined, 2));
+      try {
+        await this.app.vault.createFolder(this.settings.folder);
+      } catch (e) {
+        if (e.message !== 'Folder already exists.') {
+          console.error(e);
+        }
+      }
+      this.app.vault.create(`${this.settings.folder}/${Date.now()}.note`, JSON.stringify(defaultValue, undefined, 2));
     })
   }
 
@@ -63,14 +70,13 @@ class NoteItSettingTab extends PluginSettingTab {
     containerEl.createEl('h2', {text: 'Settings for my awesome plugin.'});
 
     new Setting(containerEl)
-      .setName('Setting #1')
-      .setDesc('It\'s a secret')
+      .setName('folder')
+      .setDesc('新建文件所在目录（支持嵌套）')
       .addText(text => text
-        .setPlaceholder('Enter your secret')
-        .setValue(this.plugin.settings.mySetting)
+        .setPlaceholder('日常/小记')
+        .setValue(this.plugin.settings.folder)
         .onChange(async (value) => {
-          console.log('Secret: ' + value);
-          this.plugin.settings.mySetting = value;
+          this.plugin.settings.folder = value;
           await this.plugin.saveSettings();
         }));
   }
