@@ -21,7 +21,7 @@ export default class NoteItPlugin extends Plugin {
 
     this.addSettingTab(new NoteItSettingTab(this.app, this));
 
-    this.addRibbonIcon('create-new', 'New NoteIt File', () => {
+    this.addRibbonIcon('create-new', '新建小记', () => {
       const defaultValue = {
         editing: {
           content: "",
