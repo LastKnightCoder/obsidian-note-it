@@ -7,7 +7,6 @@ export default function NoteIt(props) {
   const [state, setState] = useState(props.state);
 
   useEffect(() => {
-    console.log('state', state);
     props.save(state);
   }, [state]);
 
@@ -32,13 +31,11 @@ export default function NoteIt(props) {
   const updateNote = editing => {
     const newNotes = state.notes.map(note => {
       if (note.uuid === editing.uuid) {
-        console.log('editing', editing);
         return editing;
       } else {
         return note;
       }
     });
-    console.log('newNotes', newNotes);
     setState({
       editing: {
         content: "",

@@ -20,6 +20,18 @@ export default class NoteItPlugin extends Plugin {
     this.registerExtensions(["note"], VIEW_TYPE);
 
     this.addSettingTab(new NoteItSettingTab(this.app, this));
+
+    this.addRibbonIcon('create-new', 'New NoteIt File', () => {
+      const defaultValue = {
+        editing: {
+          content: "",
+          preview: "",
+          tags: [],
+        },
+        notes: []
+      }
+      this.app.vault.create(`${Date.now()}.note`, JSON.stringify(defaultValue, undefined, 2));
+    })
   }
 
   onunload() {

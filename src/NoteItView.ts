@@ -82,6 +82,7 @@ export default class NoteItView extends TextFileView {
   }
 
   clear(): void {
+    this.root.unmount();
     this.state = {};
   }
 
@@ -90,7 +91,7 @@ export default class NoteItView extends TextFileView {
   }
 
   getDisplayText(): string {
-    return this.file?.basename + '.' +  this.file?.extension
+    return this.file?.basename
   }
 
   protected async onClose(): Promise<void> {
