@@ -5,10 +5,12 @@ import NoteItView, { VIEW_TYPE } from './NoteItView';
 
 interface NoteItSettings {
   folder: string;
+  cardMaxHeight: string;
 }
 
 const DEFAULT_SETTINGS: NoteItSettings = {
-  folder: ''
+  folder: '',
+  cardMaxHeight: '400'
 }
 
 export default class NoteItPlugin extends Plugin {
@@ -67,7 +69,7 @@ class NoteItSettingTab extends PluginSettingTab {
 
     containerEl.empty();
 
-    containerEl.createEl('h2', {text: 'Settings for my awesome plugin.'});
+    containerEl.createEl('h2', {text: '小记的设置'});
 
     new Setting(containerEl)
       .setName('folder')
@@ -79,5 +81,16 @@ class NoteItSettingTab extends PluginSettingTab {
           this.plugin.settings.folder = value;
           await this.plugin.saveSettings();
         }));
+    
+    new Setting(containerEl)
+    .setName('cardMaxHeight')
+    .setDesc('卡片最大高度')
+    .addText(text => text
+      .setPlaceholder('400')
+      .setValue(this.plugin.settings.cardMaxHeight)
+      .onChange(async (value) => {
+        this.plugin.settings.cardMaxHeight = value;
+        await this.plugin.saveSettings();
+      }));
   }
 }

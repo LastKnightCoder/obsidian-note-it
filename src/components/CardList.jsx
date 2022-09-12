@@ -2,7 +2,7 @@ import * as React from 'react';
 import Card from './Card';
 
 export default function CardList(props) {
-  const { notes, deleteNote } = props;
+  const { notes, deleteNote, plugin } = props;
 
   if (!Array.isArray(notes)) {
     return null;
@@ -15,6 +15,7 @@ export default function CardList(props) {
           key={note.uuid}
           note={note}
           deleteNote={deleteNote}
+          plugin={plugin}
         />
       )}
     </div>

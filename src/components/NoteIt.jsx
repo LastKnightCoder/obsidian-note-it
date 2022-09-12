@@ -29,13 +29,13 @@ export default function NoteIt(props) {
   }
 
   const updateNote = editing => {
-    const newNotes = state.notes.map(note => {
+    const newNotes = state?.notes.map(note => {
       if (note.uuid === editing.uuid) {
         return editing;
       } else {
         return note;
       }
-    });
+    }) || [];
     setState({
       editing: {
         content: "",
@@ -70,7 +70,7 @@ export default function NoteIt(props) {
   // }
 
   const handleDeleteNote = noteWillDelete => {
-    const newNotes = state.notes.map(note => {
+    const newNotes = state.notes?.map(note => {
       if (note.uuid === noteWillDelete.uuid) {
         return {
           ...noteWillDelete,
@@ -79,7 +79,8 @@ export default function NoteIt(props) {
       } else {
         return note;
       }
-    })
+    }) || [];
+
     setState({
       ...state,
       notes: newNotes
@@ -92,7 +93,7 @@ export default function NoteIt(props) {
         <Editor editing={state.editing} onChange={handleEditorChange} onSave={handleEditorSave} />
       </div>
       <div className='note-it-preview-container'>
-        <CardList notes={state.notes} deleteNote={handleDeleteNote} />
+        <CardList notes={state.notes} deleteNote={handleDeleteNote} plugin={props.plugin} />
       </div>
     </div>
   )

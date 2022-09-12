@@ -1,10 +1,24 @@
 import * as React from 'react';
+const { useState, useEffect, useRef } = React;
 import { Tag } from 'antd';
 import { tagColors } from '../js/constants';
 
 export default function Card(props) {
-  const { deleteNote, note } = props;
+  const { deleteNote, note, plugin } = props;
   const { isDeleted = false, preview = '', tags = [] } = note;
+
+  const cardMaxHeight = Number(plugin.settings.cardMaxHeight) || 400;
+
+  const [hasMore, setHasMore] = useState(true);
+  const [hasMaxHeight, setHasMaxHeight] = useState(true);
+  const cardRef = useRef()
+
+  useEffect(() => {
+    if (cardRef.current && cardRef.current.scrollHeight < cardMaxHeight) {
+      setHasMore(false);
+      setHasMaxHeight(false);
+    }
+  }, []);
 
   const handleEditNote = () => {
     const event = new CustomEvent('note-it-edit-note', {
@@ -21,8 +35,58 @@ export default function Card(props) {
     return null;
   }
 
+  const renderLoad = () => {
+    if (!hasMore) {
+      return null;
+    }
+
+    if (hasMaxHeight) {
+      return (
+        <div 
+          onClick={() => { setHasMaxHeight(false) }} 
+          style={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            cursor: 'pointer', 
+            padding: '10px 0',
+            position: 'absolute',
+            bottom: '.5em',
+            left: 0,
+            width: '100%'
+          }}>
+          <svg style={{transform: 'rotate(90deg)', transformOrigin: 'center', }} viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+            <path d="M568.96 853.76c-8.32 0-16.64-3.2-22.4-9.6-12.8-12.8-12.8-32.64 0-45.44l213.12-213.12c10.88-10.88 16.64-25.6 16.64-40.96s-5.76-30.08-16.64-40.96L546.56 291.84c-12.8-12.8-12.8-32.64 0-45.44s32.64-12.8 45.44 0l213.12 213.12c23.04 23.04 35.84 53.76 35.84 86.4s-12.8 63.36-35.84 86.4l-213.12 213.12c-6.4 5.12-14.72 8.32-23.04 8.32z" fill="#515151" p-id="19812"></path>
+            <path d="M293.12 853.76c-8.32 0-16.64-3.2-22.4-9.6-12.8-12.8-12.8-32.64 0-45.44l213.12-213.12c22.4-22.4 22.4-59.52 0-81.92L270.72 291.84c-12.8-12.8-12.8-32.64 0-45.44s32.64-12.8 45.44 0l213.12 213.12c47.36 47.36 47.36 124.8 0 172.16L316.16 844.8c-6.4 5.76-14.72 8.96-23.04 8.96z" fill="#515151" p-id="19813"></path>
+          </svg>
+        </div>
+      )
+    } else {
+      return (
+        <div 
+          onClick={() => { setHasMaxHeight(true) }} 
+          style={{ 
+            display: 'flex', 
+            justifyContent: 'center', 
+            cursor: 'pointer', 
+            padding: '10px 0',
+            width: '100%'
+          }}>
+          <svg style={{transform: 'rotate(-90deg)', transformOrigin: 'center', }} viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
+            <path d="M568.96 853.76c-8.32 0-16.64-3.2-22.4-9.6-12.8-12.8-12.8-32.64 0-45.44l213.12-213.12c10.88-10.88 16.64-25.6 16.64-40.96s-5.76-30.08-16.64-40.96L546.56 291.84c-12.8-12.8-12.8-32.64 0-45.44s32.64-12.8 45.44 0l213.12 213.12c23.04 23.04 35.84 53.76 35.84 86.4s-12.8 63.36-35.84 86.4l-213.12 213.12c-6.4 5.12-14.72 8.32-23.04 8.32z" fill="#515151" p-id="19812"></path>
+            <path d="M293.12 853.76c-8.32 0-16.64-3.2-22.4-9.6-12.8-12.8-12.8-32.64 0-45.44l213.12-213.12c22.4-22.4 22.4-59.52 0-81.92L270.72 291.84c-12.8-12.8-12.8-32.64 0-45.44s32.64-12.8 45.44 0l213.12 213.12c47.36 47.36 47.36 124.8 0 172.16L316.16 844.8c-6.4 5.76-14.72 8.96-23.04 8.96z" fill="#515151" p-id="19813"></path>
+          </svg>
+        </div>
+      )
+    }
+  }
+
+  const cardStyle = hasMaxHeight ? {
+    maxHeight: `${cardMaxHeight}px`,
+    overflow: 'hidden'
+  } : {};
+
   return (
-    <div className="note-it-card">
+    <div ref={cardRef} className="note-it-card" style={cardStyle}>
       <div className='note-it-card-tags'>
         {tags?.map((tag, index) => {
           return <Tag color={tagColors[index % tagColors.length]} key={tag}>{tag}</Tag>
@@ -50,6 +114,7 @@ export default function Card(props) {
           </div>
         </div>
       </div>
+      {renderLoad()}
     </div>
   )
 }

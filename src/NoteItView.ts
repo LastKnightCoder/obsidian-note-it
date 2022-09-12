@@ -75,6 +75,7 @@ export default class NoteItView extends TextFileView {
     this.root = ReactDOM.createRoot(this.containerEl.lastChild as HTMLDivElement);
     this.root.render(React.createElement(NoteIt, {
       state: this.state,
+      plugin: this.plugin,
       save: this.handleSave.bind(this)
     }));
   }
@@ -103,10 +104,6 @@ export default class NoteItView extends TextFileView {
     if (this.root) {
       this.root.unmount();
     }
-    // Obsidian 限流，为保证保存成功，2s后保存
-    setTimeout(() => {
-      this.requestSave();
-    }, 2000);
   }
 }
 

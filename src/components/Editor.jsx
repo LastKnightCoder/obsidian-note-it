@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { v4 as uuid } from 'uuid'
 import { Input, Button, Tabs, Tag, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
@@ -10,7 +10,7 @@ import { renderMarkdown } from '../js/utils';
 import { tagColors } from '../js/constants';
 
 export default function Editor(props) {
-  const { onChange, onSave, editing } = props;
+  const { onChange, onSave, editing = {} } = props;
   const { content = '', preview = '', tags = [] } = editing;
 
   const [value, setValue] = useState(content);
@@ -19,6 +19,7 @@ export default function Editor(props) {
   const [noteTags, setNoteTags] = useState(tags);
   const [inputTagVisible, setInputTagVisible] = useState(false);
   const [inputTag, setInputTag] = useState('');
+  const inputTagRef = useRef();
 
   const [activeKey, setActiveKey] = useState('edit');
   const [noteInfo, setNoteInfo] = useState(editing || {});
@@ -58,6 +59,12 @@ export default function Editor(props) {
     });
   }, [noteInfo]);
 
+  useEffect(() => {
+    if (inputTagVisible) {
+      inputTagRef.current.focus();
+    }
+  }, [inputTagVisible]);
+
   const handleChange = async e => {
     const content = e.target.value;
     setValue(content);
@@ -66,14 +73,18 @@ export default function Editor(props) {
     // 并且输入中文字符会被输入两次，而放在下面则没事
     const preview = await renderMarkdown(content);
     setMarkdownPreview(preview);
-    onChange({
+    setNoteInfo({
       ...noteInfo,
       content,
       preview
-    })
+    });
   }
 
   const handleSave = () => {
+    if(!value) {
+      return;
+    }
+
     onSave({
       ...noteInfo,
       content: value,
@@ -82,7 +93,8 @@ export default function Editor(props) {
       createTime: editing.createTime || Date.now(),
       updateTime: Date.now(),
       uuid: editing.uuid || uuid()
-    })
+    });
+
     setValue('');
     setMarkdownPreview('');
     setNoteTags([]);
@@ -122,7 +134,7 @@ export default function Editor(props) {
     setInputTagVisible(true);
   }
 
-  const handleInputChange = e => {
+  const handleInputTagChange = e => {
     setInputTag(e.target.value);
   }
 
@@ -136,8 +148,13 @@ export default function Editor(props) {
         setInputTagVisible(false);
       }
     }
-    
   }
+
+  const handleKeyUp = e => {
+    if (e.ctrlKey && e.key === 'Enter' && value) {
+      handleSave();
+    }
+   }
 
   const renderTags = () => {
     return (
@@ -152,16 +169,17 @@ export default function Editor(props) {
             <Input
               bordered
               type="text"
-              size="small"
-              style={{ width: '100%' }}
+              ref={inputTagRef}
+              // size="large"
+              style={{ width: '100%', height: '2.5em' }}
               value={inputTag}
-              onChange={handleInputChange}
+              onChange={handleInputTagChange}
               onBlur={handleInputConfirm}
               onPressEnter={handleInputConfirm}
             />
           )}
           {!inputTagVisible && (
-            <Tag onClick={showInput} style={{ borderStyle: 'dashed' }}>
+            <Tag onClick={showInput} style={{ borderStyle: 'dashed', fontSize: '1em', padding: '.3em .5em', cursor: 'pointer' }}>
               <PlusOutlined /> 新建标签
             </Tag>
           )}
@@ -170,12 +188,26 @@ export default function Editor(props) {
     )
   }
 
+  const renderSaveButton = () => {
+    if (activeKey !== 'edit') {
+      return null;
+    }
+
+    return (
+      <div>
+        <Button style={{ width: 'fit-content', marginRight: '.5em' }} onClick={handleSave} type='primary' disabled={!value}>小记一下</Button>
+        <span style={{ fontSize: '1em' }}>按 Ctrl + Enter 发送</span>
+      </div>
+    )
+      
+  }
+
   return (
-    <div className='note-it-editor'>
+    <div className='note-it-editor' tabIndex={-1} onKeyUp={handleKeyUp}>
       <Tabs defaultActiveKey={activeKey} type='line' onChange={handleTabChange}>
         <TabPane key="edit" tab="编辑">
           <div className='editor'>
-            <TextArea bordered={false} value={value} autoSize={{ minRows: 15 }} showCount onChange={handleChange} />
+            <TextArea bordered={false} value={value} autoSize={{ minRows: 10 }} showCount onChange={handleChange} />
           </div>
         </TabPane>
         <TabPane key="preview" tab="预览">
@@ -185,7 +217,7 @@ export default function Editor(props) {
         </TabPane>
       </Tabs>
       {renderTags()}
-      {activeKey === 'edit' ? <Button style={{ width: 'fit-content' }} onClick={handleSave} type='primary' disabled={!value}>小记一下</Button> : null}
+      {renderSaveButton()}
     </div>
   )
 }

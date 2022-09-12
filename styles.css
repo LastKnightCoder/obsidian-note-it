@@ -125,7 +125,7 @@
   border: 1px solid var(--border-color) !important;
   padding-top: 1em;
   padding-left: 1em;
-  max-height: calc(100vh - 300px) !important;
+  max-height: calc(100vh - 400px) !important;
   overflow: auto !important;
   font-family: 'Fira Code', Consolas, Lora, '华文新魏', '魏碑-简', monospace;
 }

@@ -2,10 +2,15 @@
 
 ## 使用方法
 
-创建以 `.note` 为扩展名的文件，然后使用 Obsidian 打开即可进行使用。
+点击左侧图标新建小记
 
-![](https://cdn.staticaly.com/gh/LastKnightCoder/ImgHosting3@master/image.2za62cbypz00.png)
-![](https://cdn.staticaly.com/gh/LastKnightCoder/ImgHosting3@master/image.5ehhv8b837g0.png)
+<img src="https://cdn.staticaly.com/gh/LastKnightCoder/ImgHosting3@master/image.50zkr3br6cg0.png" style="zoom: 50%;" />
+
+编辑器分为编辑器和预览区（支持 markdown）
+
+<img src="https://cdn.staticaly.com/gh/LastKnightCoder/ImgHosting3@master/image.4y9i86hqxvs0.png" style="zoom: 50%;" />
+
+<img src="https://cdn.staticaly.com/gh/LastKnightCoder/ImgHosting3@master/image.bfzmqlup4vc.png" style="zoom: 50%;" />
 
 ## 后续安排
 
@@ -29,3 +34,4 @@
 - 1.0.7：左侧添加 icon 可以直接创建 `.note` 文件
 - 1.0.8：bugs fix
 - 1.0.9：支持在指定文件夹下新建小记 + bugs fix
+- 1.0.10：支持快捷键 Ctrl + Enter 发送小记，支持设置卡片最大高度，默认 400px
