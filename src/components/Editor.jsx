@@ -8,6 +8,7 @@ const { TextArea } = Input;
 
 import { renderMarkdown } from '../js/utils';
 import { tagColors } from '../js/constants';
+import { useCallback } from 'react';
 
 export default function Editor(props) {
   const { onChange, onSave, editing = {} } = props;
@@ -23,7 +24,7 @@ export default function Editor(props) {
 
   const [activeKey, setActiveKey] = useState('edit');
   const [noteInfo, setNoteInfo] = useState(editing || {});
-
+  const textareaRef = useRef();
 
   const handleEditNote = e => {
     if (value) {
@@ -64,6 +65,29 @@ export default function Editor(props) {
       inputTagRef.current.focus();
     }
   }, [inputTagVisible]);
+
+  useEffect(() => {
+    if (activeKey === 'edit') {
+      textareaRef.current.focus();
+    }
+  }, [activeKey]);
+
+  const handleSwitchMode = useCallback((e) => {
+    if (e.ctrlKey && e.key === '/') {
+      if (activeKey === 'edit') {
+        setActiveKey('preview');
+      } else {
+        setActiveKey('edit');
+      }
+    }
+  }, [activeKey]);
+
+  useEffect(() => {
+    document.addEventListener('keyup', handleSwitchMode)
+    return () => {
+      document.removeEventListener('keyup', handleSwitchMode)
+    }
+  }, [handleSwitchMode])
 
   const handleChange = async e => {
     const content = e.target.value;
@@ -154,7 +178,7 @@ export default function Editor(props) {
     if (e.ctrlKey && e.key === 'Enter' && value) {
       handleSave();
     }
-   }
+  }
 
   const renderTags = () => {
     return (
@@ -179,7 +203,7 @@ export default function Editor(props) {
             />
           )}
           {!inputTagVisible && (
-            <Tag onClick={showInput} style={{ borderStyle: 'dashed', fontSize: '1em', padding: '.3em .5em', cursor: 'pointer' }}>
+            <Tag onClick={showInput} style={{ borderStyle: 'dashed', fontSize: '.8em', padding: '.1em .4em', cursor: 'pointer' }}>
               <PlusOutlined /> 新建标签
             </Tag>
           )}
@@ -204,10 +228,10 @@ export default function Editor(props) {
 
   return (
     <div className='note-it-editor' tabIndex={-1} onKeyUp={handleKeyUp}>
-      <Tabs defaultActiveKey={activeKey} type='line' onChange={handleTabChange}>
+      <Tabs activeKey={activeKey} type='line' onChange={handleTabChange}>
         <TabPane key="edit" tab="编辑">
           <div className='editor'>
-            <TextArea bordered={false} value={value} autoSize={{ minRows: 10 }} showCount onChange={handleChange} />
+            <TextArea placeholder='使用快捷键 Ctrl + / 进行"编辑/预览"切换' ref={textareaRef} bordered={false} value={value} autoSize={{ minRows: 10 }} showCount onChange={handleChange} />
           </div>
         </TabPane>
         <TabPane key="preview" tab="预览">

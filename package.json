@@ -1,6 +1,6 @@
 {
 	"name": "obsidian-note-it",
-	"version": "1.0.10",
+	"version": "1.0.11",
 	"description": "小记",
 	"main": "main.js",
 	"scripts": {

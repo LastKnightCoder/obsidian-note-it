@@ -1,5 +1,6 @@
 import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
 import NoteItView, { VIEW_TYPE } from './NoteItView';
+import '../node_modules/antd/dist/antd.css';
 
 // Remember to rename these classes and interfaces!
 

@@ -1,10 +1,10 @@
-@import url('node_modules/antd/dist/antd.css');
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&family=Fira+Code:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400;1,700&family=Roboto+Slab:wght@400;700&display=swap');
 
 .note-it-container {
   display: grid;
-  grid-template-columns: 2fr 3fr;
-  padding: 2em 5em;
-  column-gap: 5em;
+  grid-template-columns: 3fr 2fr;
+  padding: 1em 5em;
+  column-gap: 3em;
   height: calc(100vh - 131px);
   overflow: hidden;
 }
@@ -26,13 +26,18 @@
 
 /* 卡片区样式 */
 .note-it-card {
-  --shadow-color1: #aaa;
+  --shadow-color1: #f5f1f4;
   --shadow-color2: #fff;
   --border-color: #e8e8e8;
   --background-color: transparent;
   --svg-fill: #262626;
+  --text-color: rgba(0, 0, 0, .85);
+  --inline-code-color: #a626a4;
+  --default-font-family: 'Lora', '魏碑-简', '华文新魏';
+  --default-code-font-family: 'Fira Code', '魏碑-简', '华文新魏', monospace;
+  --font-family-inline-code: var(--default-code-font-family);
   padding: 1.5em 2em 1em;
-  box-shadow: 3px 3px 10px var(--shadow-color1), -5px -5px 10px var(--shadow-color2); 
+  box-shadow: 5px 5px 10px var(--shadow-color1), -5px -5px 10px var(--shadow-color1); 
   user-select: text;
   border-radius: 5px;
   background-color: var(--background-color);
@@ -41,11 +46,24 @@
 }
 
 .theme-dark .note-it-card {
-  --shadow-color1: #58585b;
+  --shadow-color1: #16161a;
   --shadow-color2: #1c1b1f;
   --border-color: white;
   --background-color: transparent;
   --svg-fill: #d1dade;
+  --text-color: rgba(255, 255, 255, 1);
+  --inline-code-color: #FBDE2D;
+}
+
+.note-it-card .note-it-card-preview {
+  color: var(--text-color);
+  font-family: var(--default-font-family);
+}
+
+.note-it-card .note-it-card-preview :is(p, li) code {
+  padding: 1em 0.5em;
+  color: var(--inline-code-color);
+  font-family: var(--default-code-font-family);
 }
 
 .note-it-card .note-it-card-tags {
@@ -106,6 +124,10 @@
 
 .note-it-card :is(h1, h2, h3, h4, h5, h6) {
   color: var(--text-normal);
+}
+
+.note-it-card::-webkit-scrollbar {
+  display: none;
 }
 
 
@@ -182,7 +204,7 @@
 
 /* 平板 */
 
-@media screen and (max-width: 900px) {
+@media screen and (max-width: 1200px) {
   .note-it-container {
     display: flex;
     flex-direction: column;

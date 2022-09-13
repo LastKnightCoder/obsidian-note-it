@@ -69,7 +69,10 @@ export default function Card(props) {
             justifyContent: 'center', 
             cursor: 'pointer', 
             padding: '10px 0',
-            width: '100%'
+            width: '100%',
+            position: 'absolute',
+            bottom: '.5em',
+            left: 0,
           }}>
           <svg style={{transform: 'rotate(-90deg)', transformOrigin: 'center', }} viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" width="16" height="16">
             <path d="M568.96 853.76c-8.32 0-16.64-3.2-22.4-9.6-12.8-12.8-12.8-32.64 0-45.44l213.12-213.12c10.88-10.88 16.64-25.6 16.64-40.96s-5.76-30.08-16.64-40.96L546.56 291.84c-12.8-12.8-12.8-32.64 0-45.44s32.64-12.8 45.44 0l213.12 213.12c23.04 23.04 35.84 53.76 35.84 86.4s-12.8 63.36-35.84 86.4l-213.12 213.12c-6.4 5.12-14.72 8.32-23.04 8.32z" fill="#515151" p-id="19812"></path>
@@ -82,17 +85,20 @@ export default function Card(props) {
 
   const cardStyle = hasMaxHeight ? {
     maxHeight: `${cardMaxHeight}px`,
-    overflow: 'hidden'
+    overflow: 'auto'
   } : {};
 
   return (
-    <div ref={cardRef} className="note-it-card" style={cardStyle}>
+    <div style={{ position: 'relative' }}>
+      <div ref={cardRef} className="note-it-card" style={cardStyle}>
       <div className='note-it-card-tags'>
         {tags?.map((tag, index) => {
           return <Tag color={tagColors[index % tagColors.length]} key={tag}>{tag}</Tag>
         })}
       </div>
-      <div dangerouslySetInnerHTML={{__html: preview}}></div>
+      <div className='note-it-card-preview'>
+        <div dangerouslySetInnerHTML={{__html: preview}}></div>
+      </div>
       <div className='icons-wrapper'>
         <div className='icons'>
           <div className='edit' onClick={handleEditNote}>
@@ -114,7 +120,10 @@ export default function Card(props) {
           </div>
         </div>
       </div>
-      {renderLoad()}
+      
     </div>
+    {renderLoad()}
+    </div>
+    
   )
 }
