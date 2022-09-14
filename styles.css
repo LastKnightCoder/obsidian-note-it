@@ -91,17 +91,23 @@
   right: 1em;
 }
 
-.note-it-card .icons .edit {
+.note-it-card .icons :is(.edit, .delete, .copy, .transfer) {
   cursor: pointer;
   width: 1em;
   height: 1em;
 }
 
-.note-it-card .icons .delete {
+/* .note-it-card .icons .delete {
   cursor: pointer;
   width: 1em;
   height: 1em;
 }
+
+.note-it-card .icons .copy {
+  cursor: pointer;
+  width: 1em;
+  height: 1em;
+} */
 
 .note-it-card .icons svg path {
   fill: var(--svg-fill);

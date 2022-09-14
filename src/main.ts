@@ -2,8 +2,6 @@ import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Set
 import NoteItView, { VIEW_TYPE } from './NoteItView';
 import '../node_modules/antd/dist/antd.css';
 
-// Remember to rename these classes and interfaces!
-
 interface NoteItSettings {
   folder: string;
   cardMaxHeight: string;
@@ -42,6 +40,51 @@ export default class NoteItPlugin extends Plugin {
       }
       this.app.vault.create(`${this.settings.folder}/${Date.now()}.note`, JSON.stringify(defaultValue, undefined, 2));
     })
+  }
+
+  async getAllDirectory() {
+    // @ts-ignore
+    const dirs = await this.getDirectory(this.app.vault.adapter.basePath);
+    dirs[0] = dirs[0] + '\\'
+    // @ts-ignore
+    return dirs.map(dir => dir.replace(this.app.vault.adapter.basePath, ''));
+  }
+
+  async getDirectory(basePath: string) {
+    let dirs: string[] = [basePath];
+    // @ts-ignore
+    const fs = this.app.vault.adapter.fsPromises;
+    // @ts-ignore
+    const path = this.app.vault.adapter.path;
+    // @ts-ignore
+    const files = await fs.readdir(basePath);
+    for (let file of files) {
+      // @ts-ignore
+      const filePath = path.join(basePath, file);
+      if (filePath.indexOf('.obsidian') !== -1) {
+        continue;
+      }
+      const stat = await fs.stat(filePath);
+      if (stat.isDirectory()) {
+        dirs = dirs.concat(await this.getDirectory(filePath));
+      }
+    }
+
+    return dirs;
+  }
+
+  createOrAppend(pathName: string, fileName: string, content: string) {
+    // @ts-ignore
+    const fs = this.app.vault.adapter.fs;
+    // @ts-ignore
+    const path = this.app.vault.adapter.path;
+    // @ts-ignore
+    const fullPath = path.join(this.app.vault.adapter.basePath, pathName, fileName);
+    if (fs.existsSync(fullPath)) {
+      fs.appendFileSync(fullPath, '\n\n' + content, 'utf8')
+    } else {
+      fs.writeFileSync(fullPath, content, 'utf8')
+    }
   }
 
   onunload() {
