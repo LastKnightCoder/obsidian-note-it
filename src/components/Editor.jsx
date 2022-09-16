@@ -72,7 +72,7 @@ export default function Editor(props) {
     }
   }, [activeKey]);
 
-  const handleSwitchMode = useCallback((e) => {
+  const handleKeyUp = (e) => {
     if (e.ctrlKey && e.key === '/') {
       if (activeKey === 'edit') {
         setActiveKey('preview');
@@ -80,14 +80,18 @@ export default function Editor(props) {
         setActiveKey('edit');
       }
     }
-  }, [activeKey]);
+
+    if (e.ctrlKey && e.key === 'Enter' && value) {
+      handleSave();
+    }
+  }
 
   useEffect(() => {
-    document.addEventListener('keyup', handleSwitchMode)
+    document.addEventListener('keyup', handleKeyUp)
     return () => {
-      document.removeEventListener('keyup', handleSwitchMode)
+      document.removeEventListener('keyup', handleKeyUp)
     }
-  }, [handleSwitchMode])
+  }, [handleKeyUp])
 
   const handleChange = async e => {
     const content = e.target.value;
@@ -102,6 +106,23 @@ export default function Editor(props) {
       content,
       preview
     });
+  }
+
+  const handleEditorKeyDown  = async e => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const position = e.target.selectionStart;
+      const newValue = value.substring(0, position) + '  ' + value.substring(position);
+      setValue(newValue);
+      const preview = await renderMarkdown(content);
+      setMarkdownPreview(preview);
+      setNoteInfo({
+        ...noteInfo,
+        content,
+        preview
+      });
+      e.target.selectionEnd = position + 2;
+    }
   }
 
   const handleSave = () => {
@@ -174,12 +195,6 @@ export default function Editor(props) {
     }
   }
 
-  const handleKeyUp = e => {
-    if (e.ctrlKey && e.key === 'Enter' && value) {
-      handleSave();
-    }
-  }
-
   const renderTags = () => {
     return (
       <div className='note-it-tags-container'>
@@ -227,11 +242,11 @@ export default function Editor(props) {
   }
 
   return (
-    <div className='note-it-editor' tabIndex={-1} onKeyUp={handleKeyUp}>
+    <div className='note-it-editor' tabIndex={-1}>
       <Tabs activeKey={activeKey} type='line' onChange={handleTabChange}>
         <TabPane key="edit" tab="编辑">
           <div className='editor'>
-            <TextArea placeholder='使用快捷键 Ctrl + / 进行"编辑/预览"切换' ref={textareaRef} bordered={false} value={value} autoSize={{ minRows: 10 }} showCount onChange={handleChange} />
+            <TextArea onKeyDown={handleEditorKeyDown} placeholder='使用快捷键 Ctrl + / 进行"编辑/预览"切换' ref={textareaRef} bordered={false} value={value} autoSize={{ minRows: 10 }} showCount onChange={handleChange} />
           </div>
         </TabPane>
         <TabPane key="preview" tab="预览">

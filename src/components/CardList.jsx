@@ -2,15 +2,11 @@ import * as React from 'react';
 import Card from './Card';
 
 export default function CardList(props) {
-  const { notes, deleteNote, plugin } = props;
-
-  if (!Array.isArray(notes)) {
-    return null;
-  }
+  const { notes = [], deleteNote, plugin } = props;
 
   return (
     <div className='note-it-classlist'>
-      {notes.map(note => 
+      {notes.filter(note => !note.isDeleted).map(note => 
         <Card
           key={note.uuid}
           note={note}

@@ -2,7 +2,7 @@
 
 .note-it-container {
   display: grid;
-  grid-template-columns: 3fr 2fr;
+  grid-template-columns: 1fr 1fr;
   padding: 1em 5em;
   column-gap: 3em;
   height: calc(100vh - 131px);
@@ -15,12 +15,16 @@
   overflow: auto;
 }
 
+.note-it-preview-container::-webkit-scrollbar {
+  display: none;
+}
+
 /* 列表整体样式 */
 .note-it-classlist {
   display: flex;
   flex-direction: column;
   gap: 2em;
-  overflow: auto;
+  /* overflow: auto; */
   padding: 1em;
 }
 
@@ -36,8 +40,8 @@
   --default-font-family: 'Lora', '魏碑-简', '华文新魏';
   --default-code-font-family: 'Fira Code', '魏碑-简', '华文新魏', monospace;
   --font-family-inline-code: var(--default-code-font-family);
-  padding: 1.5em 2em 1em;
-  box-shadow: 5px 5px 10px var(--shadow-color1), -5px -5px 10px var(--shadow-color1); 
+  padding: 1em 2em 1em;
+  box-shadow: 5px 5px 5px var(--shadow-color1), -5px -5px 5px var(--shadow-color1); 
   user-select: text;
   border-radius: 5px;
   background-color: var(--background-color);
@@ -45,8 +49,12 @@
   font-size: 1.2rem;
 }
 
+.note-it-card *:last-child {
+  margin-bottom: 0;
+}
+
 .theme-dark .note-it-card {
-  --shadow-color1: #16161a;
+  --shadow-color1: #000000;
   --shadow-color2: #1c1b1f;
   --border-color: white;
   --background-color: transparent;
@@ -62,17 +70,24 @@
 
 .note-it-card .note-it-card-preview :is(p, li) code {
   padding: 1em 0.5em;
+  font-size: .9rem;
   color: var(--inline-code-color);
   font-family: var(--default-code-font-family);
 }
+
+
 
 .note-it-card .note-it-card-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 5px;
-  padding-right: 2em;
-  margin-bottom: 1em;
+  padding-right: 5em;
+  margin-bottom: .5em;
 }
+
+/* .note-it-card:hover .note-it-card-tags {
+  padding-right: 5em;
+} */
 
 .note-it-card .icons-wrapper {
   display: none;
@@ -86,7 +101,7 @@
   position: absolute;
   display: flex;
   justify-content: space-between;
-  gap: 1em;
+  gap: .8em;
   top: 1em;
   right: 1em;
 }
@@ -96,18 +111,6 @@
   width: 1em;
   height: 1em;
 }
-
-/* .note-it-card .icons .delete {
-  cursor: pointer;
-  width: 1em;
-  height: 1em;
-}
-
-.note-it-card .icons .copy {
-  cursor: pointer;
-  width: 1em;
-  height: 1em;
-} */
 
 .note-it-card .icons svg path {
   fill: var(--svg-fill);
@@ -134,6 +137,31 @@
 
 .note-it-card::-webkit-scrollbar {
   display: none;
+}
+
+.note-it-card-load, .note-it-card-fold {
+  display: flex;
+  justify-content: center;
+  cursor: pointer;
+  padding: 10px 0;
+  position: absolute;
+  bottom: .5em;
+  left: 0;
+  width: 100%;
+  /* display: none; */
+}
+
+.note-it-card:hover :is(.note-it-card-load, .note-it-card-fold) {
+  display: flex !important;
+}
+
+.note-it-card .contains-task-list li {
+  display: flex;
+  align-items: center;
+}
+.note-it-card .contains-task-list input[type='checkbox'] {
+  width: 1.1em;
+  height: 1.1em;
 }
 
 
@@ -208,8 +236,12 @@
   margin: 1em 0;
 }
 
-/* 平板 */
+/* 弹窗 */
+.ant-modal-body .ant-input {
+  background: transparent;
+}
 
+/* 平板 */
 @media screen and (max-width: 1200px) {
   .note-it-container {
     display: flex;
