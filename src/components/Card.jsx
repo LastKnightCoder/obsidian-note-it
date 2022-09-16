@@ -50,7 +50,6 @@ export default function Card(props) {
     const dirs = await plugin.getAllDirectory();
     setOptions(dirs)
     setTransferModalVisible(true);
-    console.log(dirs);
   }
 
   const handleSelect = (option) => {
@@ -63,6 +62,7 @@ export default function Card(props) {
 
   const handleSubmit = () => {
     plugin.createOrAppend(selectedOption || '\\', (fileName || Date.now()) + '.md', note?.content || '');
+    message.success('文件转移成功');
     setTransferModalVisible(false);
   }
 

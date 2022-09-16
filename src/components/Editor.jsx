@@ -123,6 +123,23 @@ export default function Editor(props) {
       });
       e.target.selectionEnd = position + 2;
     }
+
+    if (e.key === '`') {
+      e.preventDefault();
+      const startPosition = e.target.selectionStart;
+      const endPosition = e.target.selectionEnd;
+      const newContent = '`' + value.substring(startPosition, endPosition) + '`'
+      const newValue = value.substring(0, startPosition) + newContent + value.substring(endPosition);
+      setValue(newValue);
+      const preview = await renderMarkdown(content);
+      setMarkdownPreview(preview);
+      setNoteInfo({
+        ...noteInfo,
+        content,
+        preview
+      });
+      e.target.selectionEnd = endPosition + 2;
+    }
   }
 
   const handleSave = () => {

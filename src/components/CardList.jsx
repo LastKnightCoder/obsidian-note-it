@@ -1,12 +1,34 @@
 import * as React from 'react';
 import Card from './Card';
+import { Input } from 'antd';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 export default function CardList(props) {
-  const { notes = [], deleteNote, plugin } = props;
+  const { notes: reveicedNotes = [], deleteNote, plugin } = props;
+
+  const [searchValue, setSearchValue] = useState('');
+  const [notes, setNotes] = useState([]);
+
+  useEffect(() => {
+    if (!searchValue) {
+      setNotes(reveicedNotes.filter(note => !note.isDeleted));
+      return;
+    }
+    setNotes(reveicedNotes.filter(note => !note.isDeleted).filter(note => note?.tags?.indexOf(searchValue) !== -1));
+  }, [searchValue, reveicedNotes]);
+
+  const handleChange = (e) => {
+    setSearchValue(e.target.value);
+  }
+
 
   return (
     <div className='note-it-classlist'>
-      {notes.filter(note => !note.isDeleted).map(note => 
+      <div>
+        <Input size='large' style={{ width: '100%', height: '40px' }} placeholder="输入要搜索的标签" onChange={handleChange} />
+      </div>
+      {notes.map(note => 
         <Card
           key={note.uuid}
           note={note}

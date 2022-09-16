@@ -157,11 +157,13 @@
 
 .note-it-card .contains-task-list li {
   display: flex;
-  align-items: center;
+  align-items: start;
 }
 .note-it-card .contains-task-list input[type='checkbox'] {
+  margin-top: .4em;
   width: 1.1em;
   height: 1.1em;
+  flex-shrink: 0;
 }
 
 
@@ -237,7 +239,9 @@
 }
 
 /* 弹窗 */
-.ant-modal-body .ant-input {
+.ant-modal-body .ant-input,
+.ant-modal-body .ant-input:focus,
+.ant-modal-body .ant-input:hover {
   background: transparent;
 }
 
