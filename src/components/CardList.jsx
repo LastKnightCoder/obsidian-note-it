@@ -15,7 +15,11 @@ export default function CardList(props) {
       setNotes(reveicedNotes.filter(note => !note.isDeleted));
       return;
     }
-    setNotes(reveicedNotes.filter(note => !note.isDeleted).filter(note => note?.tags?.indexOf(searchValue) !== -1));
+    setNotes(
+      reveicedNotes
+        .filter(note => !note.isDeleted)
+        .filter(note => note?.tags?.some(tag => tag.indexOf(searchValue) !== -1))
+    );
   }, [searchValue, reveicedNotes]);
 
   const handleChange = (e) => {

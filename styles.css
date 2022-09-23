@@ -1,8 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&family=Fira+Code:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400;1,700&family=Roboto+Slab:wght@400;700&display=swap');
 
 .note-it-container {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  /* display: grid;
+  grid-template-columns: 1fr 1fr; */
+  display: flex;
+  flex-direction: column;
   padding: 1em 5em;
   column-gap: 3em;
   height: calc(100vh - 131px);
@@ -166,6 +168,9 @@
   flex-shrink: 0;
 }
 
+.note-it-card table {
+  width: 100%;
+}
 
 /* 编辑区样式 */
 .note-it-editor {
@@ -238,11 +243,12 @@
   margin: 1em 0;
 }
 
-/* 弹窗 */
+/* 弹窗，搜索 */
 .ant-modal-body .ant-input,
 .ant-modal-body .ant-input:focus,
 .ant-modal-body .ant-input:hover {
   background: transparent;
+  outline: none;
 }
 
 /* 平板 */
