@@ -12,6 +12,14 @@ export default function NoteIt(props) {
   }, [state]);
 
   useEffect(() => {
+    const width = parseFloat(window.getComputedStyle(container.current).width);
+    if (width > Number(props.plugin.settings.widthToTwoColumn)) {
+      container.current.classList.add('grid');
+      container.current.classList.remove('flex');
+    } else {
+      container.current.classList.add('flex');
+      container.current.classList.remove('grid');
+    }
     const observer = new ResizeObserver(entries => {
       entries.forEach(entry => {
         const { contentRect } = entry;
@@ -109,7 +117,7 @@ export default function NoteIt(props) {
   }
 
   return (
-    <div className='note-it-container grid' ref={container}>
+    <div className='note-it-container' ref={container}>
       <div className='note-it-editor-container'>
         <Editor editing={state.editing} onChange={handleEditorChange} onSave={handleEditorSave} />
       </div>
