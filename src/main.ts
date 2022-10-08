@@ -5,11 +5,13 @@ import '../node_modules/antd/dist/antd.css';
 interface NoteItSettings {
   folder: string;
   cardMaxHeight: string;
+  widthToTwoColumn: string;
 }
 
 const DEFAULT_SETTINGS: NoteItSettings = {
   folder: '',
-  cardMaxHeight: '400'
+  cardMaxHeight: '400',
+  widthToTwoColumn: '1200',
 }
 
 export default class NoteItPlugin extends Plugin {
@@ -134,6 +136,17 @@ class NoteItSettingTab extends PluginSettingTab {
       .setValue(this.plugin.settings.cardMaxHeight)
       .onChange(async (value) => {
         this.plugin.settings.cardMaxHeight = value;
+        await this.plugin.saveSettings();
+      }));
+    
+    new Setting(containerEl)
+    .setName('widthToTwoColumn')
+    .setDesc('当宽度大于多少时变为双列')
+    .addText(text => text
+      .setPlaceholder('1200')
+      .setValue(this.plugin.settings.widthToTwoColumn)
+      .onChange(async (value) => {
+        this.plugin.settings.widthToTwoColumn = value;
         await this.plugin.saveSettings();
       }));
   }

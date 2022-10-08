@@ -1,14 +1,35 @@
 import * as React from 'react';
-const { useState, useEffect }  = React;
+const { useState, useEffect, useRef }  = React;
 import Editor from './Editor';
 import CardList from './CardList';
 
 export default function NoteIt(props) {
   const [state, setState] = useState(props.state);
+  const container = useRef();
 
   useEffect(() => {
     props.save(state);
   }, [state]);
+
+  useEffect(() => {
+    const observer = new ResizeObserver(entries => {
+      entries.forEach(entry => {
+        const { contentRect } = entry;
+        const { width } = contentRect;
+        if (width > Number(props.plugin.settings.widthToTwoColumn)) {
+          container.current.classList.add('grid');
+          container.current.classList.remove('flex');
+        } else {
+          container.current.classList.add('flex');
+          container.current.classList.remove('grid');
+        }
+      });
+    });
+    observer.observe(container.current);
+    return () => {
+      observer.unobserve(container.current);
+    }
+  }, [props.plugin.settings.widthToTwoColumn]);
 
   const handleEditorChange = editing => {
     const updatedState = {
@@ -88,7 +109,7 @@ export default function NoteIt(props) {
   }
 
   return (
-    <div className='note-it-container'>
+    <div className='note-it-container grid' ref={container}>
       <div className='note-it-editor-container'>
         <Editor editing={state.editing} onChange={handleEditorChange} onSave={handleEditorSave} />
       </div>
