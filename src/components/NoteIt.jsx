@@ -25,19 +25,21 @@ export default function NoteIt(props) {
         const { contentRect } = entry;
         const { width } = contentRect;
         if (width > Number(props.plugin.settings.widthToTwoColumn)) {
-          container.current.classList.add('grid');
-          container.current.classList.remove('flex');
+          entry.target.classList.add('grid');
+          entry.target.classList.remove('flex');
         } else {
-          container.current.classList.add('flex');
-          container.current.classList.remove('grid');
+          entry.target.classList.add('flex');
+          entry.target.classList.remove('grid');
         }
       });
     });
     observer.observe(container.current);
     return () => {
-      observer.unobserve(container.current);
+      if (container.current) {
+        observer.unobserve(container.current);
+      }
     }
-  }, [props.plugin.settings.widthToTwoColumn]);
+  }, [props.plugin.settings.widthToTwoColumn, container.current]);
 
   const handleEditorChange = editing => {
     const updatedState = {
