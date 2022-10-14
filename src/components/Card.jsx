@@ -48,7 +48,7 @@ export default function Card(props) {
 
   const handleTransferNote = async () => {
     const dirs = await plugin.getAllDirectory();
-    setOptions(dirs)
+    setOptions(dirs);
     setTransferModalVisible(true);
   }
 
@@ -109,7 +109,7 @@ export default function Card(props) {
             return <Tag color={tagColors[index % tagColors.length]} key={tag}>{tag}</Tag>
           })}
         </div>
-        <div className="note-it-card-time" style={{ fontSize: '1rem', marginBottom: '0.1em', opacity: .7 }}>
+        <div className="note-it-card-time" style={{ fontSize: '1rem', marginBottom: '1em', opacity: .7 }}>
           更新于 {new Date(updateTime).toLocaleString()}
         </div>
         <div className='note-it-card-preview'>
@@ -165,7 +165,6 @@ export default function Card(props) {
         </div>
       </Modal>
     </div>
-    
   )
 }
 

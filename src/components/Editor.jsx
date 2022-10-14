@@ -245,9 +245,9 @@ export default function Editor(props) {
   }
 
   const renderSaveButton = () => {
-    if (activeKey !== 'edit') {
-      return null;
-    }
+    // if (activeKey !== 'edit') {
+    //   return null;
+    // }
 
     return (
       <div>

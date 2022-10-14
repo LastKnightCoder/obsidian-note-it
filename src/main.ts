@@ -1,6 +1,5 @@
-import { App, Editor, MarkdownView, Modal, Notice, Plugin, PluginSettingTab, Setting } from 'obsidian';
+import { App, Plugin, PluginSettingTab, Setting } from 'obsidian';
 import NoteItView, { VIEW_TYPE } from './NoteItView';
-import '../node_modules/antd/dist/antd.css';
 
 interface NoteItSettings {
   folder: string;

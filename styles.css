@@ -5,6 +5,9 @@
   column-gap: 3em;
   height: calc(100vh - 131px);
   overflow: hidden;
+  --default-font-family: var(--font-text);
+  --default-code-font-family: var(--font-monospace);
+  font-family: var(--default-font-family);
 }
 
 .note-it-container.grid {
@@ -44,7 +47,7 @@
   --svg-fill: #262626;
   --text-color: rgba(0, 0, 0, .85);
   --inline-code-color: #a626a4;
-  --default-font-family: 'Lora', '魏碑-简', '华文新魏';
+  --default-font-family: 'Trebuchet MS', 'Lora', '魏碑-简', '华文新魏';
   --default-code-font-family: 'Fira Code', '魏碑-简', '华文新魏', monospace;
   --font-family-inline-code: var(--default-code-font-family);
   padding: 1em 2em 1em;
@@ -82,8 +85,6 @@
   font-family: var(--default-code-font-family);
 }
 
-
-
 .note-it-card .note-it-card-tags {
   display: flex;
   flex-wrap: wrap;
@@ -92,16 +93,16 @@
   margin-bottom: .5em;
 }
 
-/* .note-it-card:hover .note-it-card-tags {
-  padding-right: 5em;
-} */
-
 .note-it-card .icons-wrapper {
   display: none;
 }
 
 .note-it-card:hover .icons-wrapper {
   display: block;
+}
+
+.note-it-card .note-it-card-time {
+  margin: 1em 0;
 }
 
 .note-it-card .icons {
@@ -276,4 +277,3 @@
     overflow: hidden;
   }
 }
-
