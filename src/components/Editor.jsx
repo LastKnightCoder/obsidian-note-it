@@ -125,9 +125,18 @@ export default function Editor(props) {
     }
 
     if (e.key === '`') {
-      e.preventDefault();
       const startPosition = e.target.selectionStart;
       const endPosition = e.target.selectionEnd;
+      if (
+        startPosition === endPosition && 
+        (
+          value.substring(startPosition - 2, startPosition) === '``' || 
+          value.substring(startPosition - 1, startPosition + 1) === '``'
+        )
+      ) {
+        return;
+      }
+      e.preventDefault();
       const newContent = '`' + value.substring(startPosition, endPosition) + '`'
       const newValue = value.substring(0, startPosition) + newContent + value.substring(endPosition);
       setValue(newValue);
@@ -138,7 +147,7 @@ export default function Editor(props) {
         content,
         preview
       });
-      e.target.selectionEnd = endPosition + 2;
+      e.target.selectionEnd = endPosition + 1;
     }
   }
 
