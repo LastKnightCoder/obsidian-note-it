@@ -47,8 +47,8 @@
   --svg-fill: #262626;
   --text-color: rgba(0, 0, 0, .85);
   --inline-code-color: #a626a4;
-  --default-font-family: 'Trebuchet MS', 'Lora', '魏碑-简', '华文新魏';
-  --default-code-font-family: 'Fira Code', '魏碑-简', '华文新魏', monospace;
+  --default-font-family: 'Trebuchet MS', 'Lora', '新宋体', '宋体-简', '楷体-简',;
+  --default-code-font-family: 'Jetbrains Mono', 'Fira Code', '新宋体', '宋体-简', monospace;
   --font-family-inline-code: var(--default-code-font-family);
   padding: 1em 2em 1em;
   box-shadow: 5px 5px 5px var(--shadow-color1), -5px -5px 5px var(--shadow-color1); 
