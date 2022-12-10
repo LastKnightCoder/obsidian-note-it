@@ -63,7 +63,7 @@ export default class NoteItPlugin extends Plugin {
       // @ts-ignore
       const filePath = path.join(basePath, file);
       // 隐藏文件夹不显示
-      if (filePath.startsWith('.')) {
+      if (file.startsWith('.')) {
         continue;
       }
       const stat = await fs.stat(filePath);
