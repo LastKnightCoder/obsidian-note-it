@@ -7,6 +7,7 @@
   overflow: hidden;
   --default-font-family: var(--font-text);
   --default-code-font-family: var(--font-monospace);
+  --editor-font-family: var(--font-text);
   font-family: var(--default-font-family);
 }
 
@@ -47,8 +48,6 @@
   --svg-fill: #262626;
   --text-color: rgba(0, 0, 0, .85);
   --inline-code-color: #a626a4;
-  --default-font-family: 'Trebuchet MS', 'Lora', '新宋体', '宋体-简', '楷体-简',;
-  --default-code-font-family: 'Jetbrains Mono', 'Fira Code', '新宋体', '宋体-简', monospace;
   --font-family-inline-code: var(--default-code-font-family);
   padding: 1em 2em 1em;
   box-shadow: 5px 5px 5px var(--shadow-color1), -5px -5px 5px var(--shadow-color1); 
@@ -56,7 +55,6 @@
   border-radius: 5px;
   background-color: var(--background-color);
   position: relative;
-  font-size: 1.2rem;
 }
 
 .note-it-card *:last-child {
@@ -80,7 +78,7 @@
 
 .note-it-card .note-it-card-preview :is(p, li) code {
   padding: 1em 0.5em;
-  font-size: .9rem;
+  font-size: .9em;
   color: var(--inline-code-color);
   font-family: var(--default-code-font-family);
 }
@@ -187,7 +185,6 @@
 .note-it-editor .editor textarea {
   --border-color: #e8e8e8;
   width: 100%;
-  font-size: 1.2rem;
   color: var(--text-normal) !important;
   border-radius: 4px;
   box-shadow: none !important;
@@ -196,7 +193,7 @@
   padding-left: 1em;
   max-height: calc(100vh - 400px) !important;
   overflow: auto !important;
-  font-family: 'Fira Code', Consolas, Lora, '华文新魏', '魏碑-简', monospace;
+  font-family: var(--editor-font-family);
 }
 
 .note-it-editor .editor textarea:focus {

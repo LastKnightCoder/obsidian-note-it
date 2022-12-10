@@ -1,6 +1,6 @@
 import * as React from 'react';
 const { useState, useEffect, useRef } = React;
-import { Tag, message, Modal, Select, Input } from 'antd';
+import { Tag, message, Modal, Select, Input, theme, ConfigProvider } from 'antd';
 const { Option } = Select;
 import { tagColors } from '../js/constants';
 

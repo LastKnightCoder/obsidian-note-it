@@ -1,11 +1,23 @@
 import * as React from 'react';
-const { useState, useEffect, useRef }  = React;
+const { useState, useEffect, useRef } = React;
+import { theme, ConfigProvider } from 'antd';
 import Editor from './Editor';
 import CardList from './CardList';
 
 export default function NoteIt(props) {
   const [state, setState] = useState(props.state);
   const container = useRef();
+  const [isDark, setIsDark] = useState(document.body.classList.contains('theme-dark'));
+
+  useEffect(() => {
+    const observer = new MutationObserver(mutations => {
+      setIsDark(document.body.classList.contains('theme-dark'));
+    })
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ['class']
+    });
+  });
 
   useEffect(() => {
     props.save(state);
@@ -47,7 +59,7 @@ export default function NoteIt(props) {
       editing
     };
 
-    setState(updatedState);  
+    setState(updatedState);
   }
 
   const handleEditorSave = editing => {
@@ -119,13 +131,17 @@ export default function NoteIt(props) {
   }
 
   return (
-    <div className='note-it-container' ref={container}>
-      <div className='note-it-editor-container'>
-        <Editor editing={state.editing} onChange={handleEditorChange} onSave={handleEditorSave} />
+    <ConfigProvider theme={{
+      algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm
+    }}>
+      <div className='note-it-container' ref={container}>
+        <div className='note-it-editor-container'>
+          <Editor editing={state.editing} onChange={handleEditorChange} onSave={handleEditorSave} />
+        </div>
+        <div className='note-it-preview-container'>
+          <CardList notes={state.notes} deleteNote={handleDeleteNote} plugin={props.plugin} />
+        </div>
       </div>
-      <div className='note-it-preview-container'>
-        <CardList notes={state.notes} deleteNote={handleDeleteNote} plugin={props.plugin} />
-      </div>
-    </div>
+    </ConfigProvider>
   )
 }

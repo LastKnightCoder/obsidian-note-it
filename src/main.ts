@@ -62,7 +62,8 @@ export default class NoteItPlugin extends Plugin {
     for (let file of files) {
       // @ts-ignore
       const filePath = path.join(basePath, file);
-      if (filePath.indexOf('.obsidian') !== -1) {
+      // 隐藏文件夹不显示
+      if (filePath.startsWith('.')) {
         continue;
       }
       const stat = await fs.stat(filePath);
