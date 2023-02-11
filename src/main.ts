@@ -1,16 +1,19 @@
-import { App, Plugin, PluginSettingTab, Setting } from 'obsidian';
-import NoteItView, { VIEW_TYPE } from './NoteItView';
+import { App, Plugin, PluginSettingTab, Setting, WorkspaceLeaf } from 'obsidian';
+import NoteItView, { NOTE_IT_VIEW_TYPE } from './NoteItView';
+import ZKView, {  ZK_VIEW_TYPE } from './ZKView';
 
-interface NoteItSettings {
+export interface NoteItSettings {
   folder: string;
   cardMaxHeight: string;
   widthToTwoColumn: string;
+  zkFolder: string;
 }
 
 const DEFAULT_SETTINGS: NoteItSettings = {
   folder: '',
   cardMaxHeight: '400',
   widthToTwoColumn: '1200',
+  zkFolder: 'zk'
 }
 
 export default class NoteItPlugin extends Plugin {
@@ -18,8 +21,9 @@ export default class NoteItPlugin extends Plugin {
 
   async onload() {
     await this.loadSettings();
-    this.registerView(VIEW_TYPE, (leaf) => new NoteItView(leaf, this));
-    this.registerExtensions(["note"], VIEW_TYPE);
+    this.registerView(NOTE_IT_VIEW_TYPE, (leaf) => new NoteItView(leaf, this));
+    this.registerView(ZK_VIEW_TYPE, (leaf) => new ZKView(leaf, this));
+    this.registerExtensions(["note"], NOTE_IT_VIEW_TYPE);
 
     this.addSettingTab(new NoteItSettingTab(this.app, this));
 
@@ -41,6 +45,8 @@ export default class NoteItPlugin extends Plugin {
       }
       this.app.vault.create(`${this.settings.folder}/${Date.now()}.note`, JSON.stringify(defaultValue, undefined, 2));
     })
+
+    this.addRibbonIcon('carrot', '显示ZKEditor', e => this.openLeaf(ZK_VIEW_TYPE));
   }
 
   async getAllDirectory() {
@@ -87,6 +93,18 @@ export default class NoteItPlugin extends Plugin {
     } else {
       fs.writeFileSync(fullPath, content, 'utf8')
     }
+  }
+
+  async openLeaf(name: string) {
+    let leaf: WorkspaceLeaf;
+    if (!this.app.workspace.getLeavesOfType(name).length) {
+      await this.app.workspace.getRightLeaf(false).setViewState({
+        type: name,
+        active: true
+      });
+    }
+    leaf = this.app.workspace.getLeavesOfType(name)[0];
+    this.app.workspace.revealLeaf(leaf);
   }
 
   onunload() {
@@ -147,6 +165,17 @@ class NoteItSettingTab extends PluginSettingTab {
       .setValue(this.plugin.settings.widthToTwoColumn)
       .onChange(async (value) => {
         this.plugin.settings.widthToTwoColumn = value;
+        await this.plugin.saveSettings();
+      }));
+    
+    new Setting(containerEl)
+    .setName('zkFolder')
+    .setDesc('ZK卡片保存的目录')
+    .addText(text => text
+      .setPlaceholder('zk')
+      .setValue(this.plugin.settings.zkFolder)
+      .onChange(async (value) => {
+        this.plugin.settings.zkFolder = value;
         await this.plugin.saveSettings();
       }));
   }

@@ -8,10 +8,9 @@ const { TextArea } = Input;
 
 import { renderMarkdown } from '../js/utils';
 import { tagColors } from '../js/constants';
-import { useCallback } from 'react';
 
 export default function Editor(props) {
-  const { onChange, onSave, editing = {} } = props;
+  const { onChange, onSave, editing = {}, editorContentListener, minRows = 10, isNoteMode = true } = props;
   const { content = '', preview = '', tags = [] } = editing;
 
   const [value, setValue] = useState(content);
@@ -27,30 +26,17 @@ export default function Editor(props) {
   const textareaRef = useRef();
 
   const handleEditNote = e => {
-    if (value) {
-      // 先保存
-      onSave({
-        ...noteInfo,
-        content: value,
-        preview: markdownPreview,
-        tags: noteTags,
-        createTime: noteInfo.createTime || Date.now(),
-        updateTime: Date.now(),
-        uuid: noteInfo.uuid || uuid()
-      })
-    }
     const editNote = e.detail;
     setValue(editNote.content || '');
     setMarkdownPreview(editNote.preview || '');
-    setNoteInfo({...editNote});
+    setNoteInfo({ ...editNote });
     setNoteTags(editNote.tags || []);
   }
 
   useEffect(() => {
-    window.addEventListener('note-it-edit-note', handleEditNote);
-
+    editorContentListener?.addEventListener('note-it-edit-note', handleEditNote);
     return () => {
-      window.removeEventListener('note-it-edit-note', handleEditNote);
+      editorContentListener?.removeEventListener('note-it-edit-note', handleEditNote);
     }
   }, [handleEditNote]);
 
@@ -73,6 +59,7 @@ export default function Editor(props) {
   }, [activeKey]);
 
   const handleKeyUp = (e) => {
+    if (!isNoteMode) return;
     if (e.ctrlKey && e.key === '/') {
       if (activeKey === 'edit') {
         setActiveKey('preview');
@@ -104,11 +91,13 @@ export default function Editor(props) {
     setNoteInfo({
       ...noteInfo,
       content,
-      preview
+      preview,
+      createTime: noteInfo.createTime || Date.now(),
+      updateTime: Date.now()
     });
   }
 
-  const handleEditorKeyDown  = async e => {
+  const handleEditorKeyDown = async e => {
     if (e.key === 'Tab') {
       e.preventDefault();
       const position = e.target.selectionStart;
@@ -128,9 +117,9 @@ export default function Editor(props) {
       const startPosition = e.target.selectionStart;
       const endPosition = e.target.selectionEnd;
       if (
-        startPosition === endPosition && 
+        startPosition === endPosition &&
         (
-          value.substring(startPosition - 2, startPosition) === '``' || 
+          value.substring(startPosition - 2, startPosition) === '``' ||
           value.substring(startPosition - 1, startPosition + 1) === '``'
         )
       ) {
@@ -152,7 +141,7 @@ export default function Editor(props) {
   }
 
   const handleSave = () => {
-    if(!value) {
+    if (!value?.trim()) {
       return;
     }
 
@@ -164,15 +153,6 @@ export default function Editor(props) {
       createTime: editing.createTime || Date.now(),
       updateTime: Date.now(),
       uuid: editing.uuid || uuid()
-    });
-
-    setValue('');
-    setMarkdownPreview('');
-    setNoteTags([]);
-    setNoteInfo({
-      content: "",
-      preview: "",
-      tags: []
     });
   }
 
@@ -213,7 +193,7 @@ export default function Editor(props) {
     if (inputTag && noteTags.indexOf(inputTag) === -1) {
       handleAddTag(inputTag);
     } else {
-      if(inputTag) {
+      if (inputTag) {
         message.info('有同名的标签');
       } else {
         setInputTagVisible(false);
@@ -235,7 +215,6 @@ export default function Editor(props) {
               bordered
               type="text"
               ref={inputTagRef}
-              // size="large"
               style={{ width: '100%', height: '2.5em' }}
               value={inputTag}
               onChange={handleInputTagChange}
@@ -254,17 +233,12 @@ export default function Editor(props) {
   }
 
   const renderSaveButton = () => {
-    // if (activeKey !== 'edit') {
-    //   return null;
-    // }
-
     return (
       <div>
         <Button style={{ width: 'fit-content', marginRight: '.5em' }} onClick={handleSave} type='primary' disabled={!value}>小记一下</Button>
-        <span style={{ fontSize: '1em' }}>按 Ctrl + Enter 发送</span>
+        {isNoteMode ? <span style={{ fontSize: '1em' }}>按 Ctrl + Enter 发送</span> : null}
       </div>
     )
-      
   }
 
   return (
@@ -272,11 +246,18 @@ export default function Editor(props) {
       <Tabs activeKey={activeKey} type='line' onChange={handleTabChange}>
         <TabPane key="edit" tab="编辑">
           <div className='editor'>
-            <TextArea onKeyDown={handleEditorKeyDown} placeholder='使用快捷键 Ctrl + / 进行"编辑/预览"切换' ref={textareaRef} bordered={false} value={value} autoSize={{ minRows: 10 }} showCount onChange={handleChange} />
+            <TextArea 
+              onKeyDown={handleEditorKeyDown} 
+              placeholder={isNoteMode ? '使用快捷键 Ctrl + / 进行"编辑/预览"切换' : ''}
+              ref={textareaRef} bordered={false} 
+              value={value} autoSize={{ minRows }} 
+              showCount onChange={handleChange} />
           </div>
         </TabPane>
         <TabPane key="preview" tab="预览">
-          <div className='preview'>
+          <div className='preview' style={{
+            minHeight: '200px'
+          }}>
             <div dangerouslySetInnerHTML={{ __html: markdownPreview }}></div>
           </div>
         </TabPane>

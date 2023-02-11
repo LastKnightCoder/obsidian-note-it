@@ -5,7 +5,7 @@ const { Option } = Select;
 import { tagColors } from '../js/constants';
 
 export default function Card(props) {
-  const { deleteNote, note, plugin } = props;
+  const { deleteNote, editNote, note, plugin } = props;
   const { preview = '', tags = [], updateTime = Date.now() } = note;
 
   const cardMaxHeight = Number(plugin.settings.cardMaxHeight) || 400;
@@ -27,10 +27,7 @@ export default function Card(props) {
   }, []);
 
   const handleEditNote = () => {
-    const event = new CustomEvent('note-it-edit-note', {
-      detail: note
-    });
-    window.dispatchEvent(event);
+    editNote && editNote(note);
   }
 
   const handleDeleteNote = () => {

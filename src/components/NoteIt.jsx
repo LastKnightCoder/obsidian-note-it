@@ -3,21 +3,12 @@ const { useState, useEffect, useRef } = React;
 import { theme, ConfigProvider } from 'antd';
 import Editor from './Editor';
 import CardList from './CardList';
+import useDark from '../hooks/useDark';
 
 export default function NoteIt(props) {
   const [state, setState] = useState(props.state);
   const container = useRef();
-  const [isDark, setIsDark] = useState(document.body.classList.contains('theme-dark'));
-
-  useEffect(() => {
-    const observer = new MutationObserver(mutations => {
-      setIsDark(document.body.classList.contains('theme-dark'));
-    })
-    observer.observe(document.body, {
-      attributes: true,
-      attributeFilter: ['class']
-    });
-  });
+  const isDark = useDark();
 
   useEffect(() => {
     props.save(state);
@@ -62,16 +53,20 @@ export default function NoteIt(props) {
     setState(updatedState);
   }
 
-  const handleEditorSave = editing => {
+  // 保存远内容，并更新为新内容
+  const handleEditorSave = (editing, newEditing = {}) => {
     const { isCreated = false } = editing;
     if (isCreated) {
-      updateNote(editing)
+      updateNote(editing, newEditing);
     } else {
-      createNote(editing)
+      createNote(editing, newEditing);
     }
+    // 因为 Editor 不是受控组件，只能通过事件通知 Editor 修改编辑区内容
+    const event = new CustomEvent('note-it-edit-note', { detail: newEditing });
+    container.current.dispatchEvent(event);
   }
 
-  const updateNote = editing => {
+  const updateNote = (editing, newEditing = {}) => {
     const newNotes = state?.notes.map(note => {
       if (note.uuid === editing.uuid) {
         return editing;
@@ -83,13 +78,18 @@ export default function NoteIt(props) {
       editing: {
         content: "",
         preview: "",
-        tags: []
+        tags: [],
+        newEditing
       },
       notes: [...newNotes]
     });
   }
 
-  const createNote = editing => {
+  const createNote = (editing, newEditing = {}) => {
+    console.log('create', editing);
+    if (!editing?.content?.trim()) {
+      return;
+    }
     const createdEditing = {
       ...editing,
       isCreated: true
@@ -99,18 +99,17 @@ export default function NoteIt(props) {
       editing: {
         content: "",
         preview: "",
-        tags: []
+        tags: [],
+        ...newEditing
       },
       notes: Array.isArray(state.notes) ? [createdEditing, ...state.notes] : [createdEditing]
     })
   }
 
-  // const handleEditNote = note => {
-  //   setState({
-  //     ...state,
-  //     editing: note
-  //   })
-  // }
+  const handleEditNote = note => {
+    // 先保存内容
+    handleEditorSave(state.editing, note);
+  }
 
   const handleDeleteNote = noteWillDelete => {
     const newNotes = state.notes?.map(note => {
@@ -136,10 +135,10 @@ export default function NoteIt(props) {
     }}>
       <div className='note-it-container' ref={container}>
         <div className='note-it-editor-container'>
-          <Editor editing={state.editing} onChange={handleEditorChange} onSave={handleEditorSave} />
+          <Editor editing={state.editing} onChange={handleEditorChange} onSave={handleEditorSave} editorContentListener={container.current} />
         </div>
         <div className='note-it-preview-container'>
-          <CardList notes={state.notes} deleteNote={handleDeleteNote} plugin={props.plugin} />
+          <CardList notes={state.notes} deleteNote={handleDeleteNote} plugin={props.plugin} editNote={handleEditNote} />
         </div>
       </div>
     </ConfigProvider>

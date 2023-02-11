@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 
 export default function CardList(props) {
-  const { notes: reveicedNotes = [], deleteNote, plugin } = props;
+  const { notes: reveicedNotes = [], deleteNote, editNote, plugin } = props;
 
   const [searchValue, setSearchValue] = useState('');
   const [notes, setNotes] = useState([]);
@@ -37,6 +37,7 @@ export default function CardList(props) {
           key={note.uuid}
           note={note}
           deleteNote={deleteNote}
+          editNote={editNote}
           plugin={plugin}
         />
       )}

@@ -93,7 +93,7 @@ export default class NoteItView extends TextFileView {
   }
 
   getViewType(): string {
-    return VIEW_TYPE;
+    return NOTE_IT_VIEW_TYPE;
   }
 
   getDisplayText(): string {
@@ -107,4 +107,4 @@ export default class NoteItView extends TextFileView {
   }
 }
 
-export const VIEW_TYPE = 'note-it-view'
+export const NOTE_IT_VIEW_TYPE = 'note-it-view'
