@@ -2,6 +2,7 @@ import { ItemView, WorkspaceLeaf } from 'obsidian';
 import NoteItPlugin from './main';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom/client';
+import { message } from 'antd';
 // @ts-ignore
 import ZKEditor from './components/ZKEditor';
 
@@ -32,7 +33,7 @@ export default class ZKView extends ItemView {
       try {
         initData = JSON.parse(initData || '{}');
       } catch(e) {
-        console.error('解析zk-data失败');
+        message.error('解析zk-data失败');
         initData = {
           content: "",
           preview: "",

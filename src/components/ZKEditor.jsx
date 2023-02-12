@@ -32,7 +32,6 @@ const ZKEditor = (props) => {
       return;
     };
     const { tags, updateTime, createTime } = editing;
-    console.log('editing', editing);
     const fronnterMatter = `---
 title: ${fileName}
 created: ${new Date(createTime).toLocaleString()}
@@ -43,7 +42,7 @@ tags: [${tags?.join(', ')}]
     try {
       saveToFile(fileName, fronnterMatter + editing.content);
     } catch(e) {
-      message.error('保存失败');
+      message.error('保存失败，请确定文件夹是否存在');
       setFileName("");
       return;
     }
@@ -69,7 +68,8 @@ tags: [${tags?.join(', ')}]
       </div>
       <Modal okText="保存" cancelText="取消" open={isModalVisible} onCancel={() => { setIsModalVisible(false); setFileName(""); }} onOk={handleSaveToFile}>
         <Input 
-          ref={inputRef} 
+          value={fileName}
+          ref={inputRef}
           onChange={(e) => { setFileName(e.target.value) }} 
           placeholder="请输入要保存的文件名，回车确定" 
           onPressEnter={handleSaveToFile} 
