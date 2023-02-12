@@ -241,27 +241,58 @@ export default function Editor(props) {
     )
   }
 
-  return (
-    <div className='note-it-editor' tabIndex={-1}>
+  const renderZKEditor = () => {
+    return (
+      <div>
+        <div className='preview' style={{
+          height: `${window.innerHeight / 2 * 0.8}px`,
+          overflow: 'auto',
+        }}>
+          <div dangerouslySetInnerHTML={{ __html: markdownPreview }}></div>
+        </div>
+        <div className='editor' style={{
+          marginTop: '3em',
+        }}>
+          <TextArea
+            onKeyDown={handleEditorKeyDown}
+            placeholder='请在这里输入'
+            ref={textareaRef} bordered={false}
+            value={value} autoSize={{ minRows }}
+            onChange={handleChange} />
+        </div>
+      </div>
+    )
+  }
+
+  const renderNoteEditor = () => {
+    return (
       <Tabs activeKey={activeKey} type='line' onChange={handleTabChange}>
         <TabPane key="edit" tab="编辑">
           <div className='editor'>
-            <TextArea 
-              onKeyDown={handleEditorKeyDown} 
+            <TextArea
+              onKeyDown={handleEditorKeyDown}
               placeholder={isNoteMode ? '使用快捷键 Ctrl + / 进行"编辑/预览"切换' : ''}
-              ref={textareaRef} bordered={false} 
-              value={value} autoSize={{ minRows }} 
-              showCount onChange={handleChange} />
+              ref={textareaRef} bordered={false}
+              value={value} autoSize={{ minRows }}
+              onChange={handleChange} />
           </div>
         </TabPane>
         <TabPane key="preview" tab="预览">
           <div className='preview' style={{
-            minHeight: '200px'
+            minHeight: '300px',
+            maxHeight: '300px',
+            overflow: 'auto'
           }}>
             <div dangerouslySetInnerHTML={{ __html: markdownPreview }}></div>
           </div>
         </TabPane>
       </Tabs>
+    )
+  }
+
+  return (
+    <div className='note-it-editor' tabIndex={-1}>
+      {isNoteMode ? renderNoteEditor() : renderZKEditor()}
       {renderTags()}
       {renderSaveButton()}
     </div>

@@ -61,12 +61,11 @@ tags: [${tags?.join(', ')}]
       algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm
     }}>
       <div ref={container} className='zk-editor-container' style={{
-        padding: '2em 1em',
+        padding: '1em 1em',
         width: '100%',
-        height: '100vh',
         background: 'transparent'
       }}>
-        <Editor editing={editing} onChange={handleChange} onSave={handleSave} editorContentListener={container.current} minRows={30} isNoteMode={false} />
+        <Editor editing={editing} onChange={handleChange} onSave={handleSave} editorContentListener={container.current} minRows={15} isNoteMode={false} />
       </div>
       <Modal okText="保存" cancelText="取消" open={isModalVisible} onCancel={() => { setIsModalVisible(false); setFileName(""); }} onOk={handleSaveToFile}>
         <Input 
