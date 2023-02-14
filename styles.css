@@ -154,7 +154,6 @@
   bottom: .5em;
   left: 0;
   width: 100%;
-  /* display: none; */
 }
 
 .note-it-card:hover :is(.note-it-card-load, .note-it-card-fold) {
@@ -193,6 +192,7 @@
   max-height: calc(100vh - 400px) !important;
   overflow: auto !important;
   font-family: var(--editor-font-family);
+  font-size: 1rem;
 }
 
 .note-it-editor .editor textarea:focus {

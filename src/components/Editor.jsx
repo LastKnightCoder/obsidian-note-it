@@ -243,24 +243,27 @@ export default function Editor(props) {
 
   const renderZKEditor = () => {
     return (
-      <div>
-        <div className='preview' style={{
-          height: `${window.innerHeight / 2 * 0.8}px`,
-          overflow: 'auto',
-        }}>
-          <div dangerouslySetInnerHTML={{ __html: markdownPreview }}></div>
-        </div>
-        <div className='editor' style={{
-          marginTop: '3em',
-        }}>
-          <TextArea
-            onKeyDown={handleEditorKeyDown}
-            placeholder='请在这里输入'
-            ref={textareaRef} bordered={false}
-            value={value} autoSize={{ minRows }}
-            onChange={handleChange} />
-        </div>
-      </div>
+      <Tabs activeKey={activeKey} type='line' onChange={handleTabChange}>
+        <TabPane key="edit" tab="编辑">
+          <div className='editor'>
+            <TextArea
+              onKeyDown={handleEditorKeyDown}
+              placeholder='请在这里输入...'
+              ref={textareaRef} bordered={false}
+              value={value} autoSize={{ minRows }}
+              onChange={handleChange} />
+          </div>
+        </TabPane>
+        <TabPane key="preview" tab="预览">
+          <div className='preview' style={{
+            minHeight: '300px',
+            maxHeight: 'calc(100vh - 300px)',
+            overflow: 'auto'
+          }}>
+            <div dangerouslySetInnerHTML={{ __html: markdownPreview }}></div>
+          </div>
+        </TabPane>
+      </Tabs>
     )
   }
 
@@ -271,7 +274,7 @@ export default function Editor(props) {
           <div className='editor'>
             <TextArea
               onKeyDown={handleEditorKeyDown}
-              placeholder={isNoteMode ? '使用快捷键 Ctrl + / 进行"编辑/预览"切换' : ''}
+              placeholder={'使用快捷键 Ctrl + / 进行"编辑/预览"切换'}
               ref={textareaRef} bordered={false}
               value={value} autoSize={{ minRows }}
               onChange={handleChange} />
@@ -280,7 +283,7 @@ export default function Editor(props) {
         <TabPane key="preview" tab="预览">
           <div className='preview' style={{
             minHeight: '300px',
-            maxHeight: '300px',
+            maxHeight: 'calc(100vh - 300px)',
             overflow: 'auto'
           }}>
             <div dangerouslySetInnerHTML={{ __html: markdownPreview }}></div>
